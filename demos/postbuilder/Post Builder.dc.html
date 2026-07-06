@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  :root {
+    --cos-accent:#6818F8; --cos-accent-strong:#5211CC; --cos-accent-tint:#F1ECFF; --cos-accent-ring:rgba(104,24,248,0.16);
+    --cos-navy:#081A53; --cos-mist:#F5F7FA;
+    --cos-grad-violet:linear-gradient(160deg,#9B5CFF 0%,#6818F8 100%);
+    --cos-font-display:'Manrope', system-ui, -apple-system, sans-serif;
+    --cos-font-body:'Inter', system-ui, -apple-system, sans-serif;
+  }
+  body { font-family: var(--cos-font-body); -webkit-font-smoothing: antialiased; }
+  textarea, input, select, button { font-family: inherit; }
+  .pmc-input:focus, .pmc-textarea:focus { outline: none; border-color: var(--cos-accent) !important; box-shadow: 0 0 0 3px var(--cos-accent-ring) !important; }
+  .pmc-scroll::-webkit-scrollbar { width: 9px; height: 9px; }
+  .pmc-scroll::-webkit-scrollbar-thumb { background: #d7d7d4; border-radius: 5px; }
+  .pmc-act:hover { background: #f3f2ef !important; }
+  .pmc-swatch:hover { transform: scale(1.08); }
+  .pmc-card { transition: transform .14s, box-shadow .14s; }
+  .pmc-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.13) !important; }
+  .pmc-card:hover .pmc-editpill { opacity: 1 !important; }
+  .pmc-card:hover .pmc-del { opacity: 1 !important; }
+  .pmc-mchip:hover { border-color:#dcc98f !important; }
+  .pmc-back:hover { background:#f0efec !important; }
+  .pmc-del:hover { background:#fdecec !important; border-color:#f3b4b4 !important; }
+  .pmc-add:hover { border-color:#6818F8 !important; color:#a0843a !important; background:#f7f2e6 !important; }
+  .pmc-step:hover { background:#f0efec !important; }
+  .pmc-avup:hover .pmc-avoverlay { opacity:1 !important; }
+  .pmc-graphic:hover .pmc-gov { opacity:1 !important; }
+  .pmc-tool:hover { filter:brightness(0.97); }
+  @keyframes pmcspin { to { transform: rotate(360deg); } }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+</helmet>
+
+<div style="height:100vh; min-height:680px; background:var(--cos-mist); color:var(--cos-navy); overflow:hidden; display:flex; flex-direction:column; position:relative;">
+
+  <!-- (sign-in removed — open shared workspace: anyone with the URL edits the same data) -->
+
+
+  <!-- ===================== GALLERY VIEW ===================== -->
+  <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ true }}">
+  <div style="height:100%; display:flex; flex-direction:column;">
+
+    <!-- BrandBar — controlled centrally via brand-bar-config.js -->
+    <dc-import name="BrandBar" hint-size="100%,40px" style="flex:none;"></dc-import>
+
+    <header style="padding:12px clamp(14px,3vw,30px); background:#fff; border-bottom:1px solid #e3e2df; display:flex; align-items:center; justify-content:space-between; gap:14px; flex:none; flex-wrap:wrap;">
+      <div style="position:relative;">
+        <button class="pmc-tool" onClick="{{ toggleSarah }}" style="display:flex; align-items:center; gap:13px; background:transparent; border:none; cursor:pointer; padding:4px 6px 4px 4px; border-radius:10px; text-align:left;">
+          <div style="width:44px; height:44px; border-radius:50%; background-image:{{ photoBg }}; background-size:cover; background-position:center; flex:none;"></div>
+          <div style="line-height:1.2;">
+            <div style="font-family:var(--cos-font-display); font-size:10.5px; font-weight:700; letter-spacing:0.12em; color:#8A93A8; text-transform:uppercase;">Post Builder · CatalystOS</div>
+            <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:17px; font-weight:800; letter-spacing:-0.01em; color:#1d2226;">Sarah Mitchell</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b0b0ab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+            <div style="font-size:12px; color:#8a8a86; margin-top:1px;">{{ bradTitle }}</div>
+          </div>
+        </button>
+        <sc-if value="{{ bradOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:100%; left:0; margin-top:8px; width:312px; background:#fff; border:1px solid #e3e2df; border-radius:13px; box-shadow:0 14px 34px rgba(0,0,0,0.18); padding:18px; z-index:45;">
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin-bottom:12px;">Edit founder</div>
+            <div style="display:flex; align-items:center; gap:13px;">
+              <label class="pmc-avup" style="position:relative; cursor:pointer; flex:none;">
+                <div style="width:56px; height:56px; border-radius:50%; background-image:{{ photoBg }}; background-size:cover; background-position:center;"></div>
+                <div class="pmc-avoverlay" style="position:absolute; inset:0; border-radius:50%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; opacity:0; transition:.15s;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 012-2h2l1.5-2h7L18 7h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><circle cx="12" cy="13" r="3.2"/></svg></div>
+                <input type="file" accept="image/*" onChange="{{ onAvatarFile }}" style="display:none;" />
+              </label>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:14.5px; font-weight:700; color:#1d2226;">Sarah Mitchell</div>
+                <button class="pmc-back" onClick="{{ removeAvatar }}" style="margin-top:6px; background:#faf9f7; border:1px solid #e0dfdb; padding:5px 11px; border-radius:7px; cursor:pointer; font-size:12px; font-weight:600; color:#b4332b;">Remove photo</button>
+              </div>
+            </div>
+            <label style="font-size:12.5px; font-weight:600; color:#5e5e5a; display:block; margin:14px 0 7px;">Title (applies to every post)</label>
+            <textarea class="pmc-input" value="{{ bradTitle }}" onInput="{{ setSarahTitle }}" rows="2" style="width:100%; padding:10px 12px; border:1px solid #dcdbd7; border-radius:8px; font-size:13.5px; line-height:1.4; color:#1d2226; resize:vertical;"></textarea>
+            <button onClick="{{ closeSarah }}" style="width:100%; margin-top:12px; background:#1e4a85; border:1px solid #1e4a85; padding:10px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#fff;">Done</button>
+            <div style="margin-top:13px; padding-top:13px; border-top:1px solid #ececea;">
+              <div style="font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#b0b0ab;">Team workspace · live</div>
+              <div style="font-size:12px; color:#5e5e5a;">Every change saves automatically for the whole team.</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="pmc-tool" onClick="{{ openBrand }}" style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #dcdbd7; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#1d2226;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6818F8" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          Company Templates
+        </button>
+        <div style="position:relative;">
+          <button class="pmc-tool" onClick="{{ toggleDl }}" style="display:flex; align-items:center; gap:8px; background:#F1ECFF; border:1px solid #D9CBFF; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#5211CC; box-shadow:0 2px 8px rgba(104,24,248,.28);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5211CC" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8A6FE0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <sc-if value="{{ dlOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; top:100%; right:0; margin-top:6px; width:208px; background:#fff; border:1px solid #e3e2df; border-radius:11px; box-shadow:0 12px 30px rgba(0,0,0,0.16); overflow:hidden; z-index:40;">
+              <button class="pmc-act" onClick="{{ pickPDF }}" style="width:100%; display:flex; align-items:center; gap:11px; padding:12px 15px; background:#fff; border:none; cursor:pointer; text-align:left;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                <div>
+                  <div style="font-size:13.5px; font-weight:600; color:#1d2226;">This month as PDF</div>
+                  <div style="font-size:11px; color:#9a9a95;">Visual, one page each</div>
+                </div>
+              </button>
+              <div style="height:1px; background:#f0efec;"></div>
+              <button class="pmc-act" onClick="{{ pickWord }}" style="width:100%; display:flex; align-items:center; gap:11px; padding:12px 15px; background:#fff; border:none; cursor:pointer; text-align:left;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13l1.5 4 1.5-4 1.5 4 1.5-4"/></svg>
+                <div>
+                  <div style="font-size:13.5px; font-weight:600; color:#1d2226;">This month as Word</div>
+                  <div style="font-size:11px; color:#9a9a95;">Editable .doc copy</div>
+                </div>
+              </button>
+              <div style="height:1px; background:#f0efec;"></div>
+              <button class="pmc-act" onClick="{{ pickPNG }}" style="width:100%; display:flex; align-items:center; gap:11px; padding:12px 15px; background:#fff; border:none; cursor:pointer; text-align:left;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1f8a5b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+                <div>
+                  <div style="font-size:13.5px; font-weight:600; color:#1d2226;">Graphics as PNG</div>
+                  <div style="font-size:11px; color:#9a9a95;">Only the graphics, at set size</div>
+                </div>
+              </button>
+            </div>
+          </sc-if>
+        </div>
+        <button class="pmc-tool" onClick="{{ sendReview }}" style="display:flex; align-items:center; gap:7px; background:#F1ECFF; border:1px solid #D9CBFF; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#5211CC; box-shadow:0 2px 8px rgba(104,24,248,.28);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6818F8" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12s-3.5-7-10-7-10 7-10 7 3.5 7 10 7 10-7 10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          Send to client for review
+        </button>
+        <button class="pmc-tool" onClick="{{ saveNow }}" style="display:flex; align-items:center; gap:9px; background:var(--cos-grad-violet); border:1px solid transparent; padding:12px 24px; border-radius:9px; cursor:pointer; font-size:14.5px; font-weight:800; color:#fff; box-shadow:0 6px 18px -6px rgba(104,24,248,.55);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+          {{ saveBtnLabel }}
+        </button>
+        <button class="pmc-tool" onClick="{{ sendHubspot }}" style="display:flex; align-items:center; gap:7px; background:#FF7A59; border:1px solid #FF7A59; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#fff; box-shadow:0 2px 8px rgba(255,122,89,.35);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          Send to HubSpot
+        </button>
+      </div>
+    </header>
+
+    <sc-if value="{{ dlOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeDl }}" style="position:absolute; inset:0; z-index:35;"></div>
+    </sc-if>
+    <sc-if value="{{ bradOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeSarah }}" style="position:absolute; inset:0; z-index:35;"></div>
+    </sc-if>
+
+    <!-- month selector -->
+    <div style="padding:11px clamp(14px,3vw,24px); background:#fff; border-bottom:1px solid #ececea; flex:none; display:flex; align-items:center; gap:10px;">
+      <div style="display:flex; gap:7px; flex:none;">
+        <button class="pmc-back" onClick="{{ selectAll }}" style="background:#faf9f7; border:1px solid #e0dfdb; padding:8px 12px; border-radius:999px; cursor:pointer; font-size:12.5px; font-weight:700; color:#3b3b38;">All</button>
+        <button class="pmc-back" onClick="{{ selectCurrent }}" style="background:#faf9f7; border:1px solid #e0dfdb; padding:8px 12px; border-radius:999px; cursor:pointer; font-size:12.5px; font-weight:700; color:#3b3b38;">This month</button>
+      </div>
+      <div style="width:1px; height:22px; background:#e6e5e1; flex:none;"></div>
+      <div class="pmc-scroll" style="display:flex; gap:7px; overflow-x:auto; flex:1; -webkit-overflow-scrolling:touch; padding-bottom:2px;">
+        <sc-for list="{{ monthChips }}" as="m" hint-placeholder-count="12">
+          <button class="pmc-mchip" onClick="{{ m.onToggle }}" style="{{ m.style }}">
+            <span>{{ m.label }}</span>
+            <sc-if value="{{ m.hasPosts }}" hint-placeholder-val="{{ true }}"><span style="{{ m.badgeStyle }}">{{ m.count }}</span></sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div class="pmc-scroll" style="flex:1; overflow-y:auto; padding:24px clamp(14px,3vw,32px) 50px;">
+      <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="1">
+        <div style="margin-bottom:34px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:baseline; gap:10px;">
+              <h2 style="font-family:var(--cos-font-display); font-size:19px; font-weight:800; letter-spacing:-0.01em; margin:0; color:var(--cos-navy);">{{ sec.title }}</h2>
+              <span style="font-size:13px; color:#9a9a95;">{{ sec.countLabel }}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:12.5px; font-weight:600; color:#8a8a86;">Posts this month</span>
+              <div style="display:flex; align-items:center; border:1px solid #dcdbd7; border-radius:9px; overflow:hidden; background:#fff;">
+                <button class="pmc-step" onClick="{{ sec.onDec }}" style="width:34px; height:34px; border:none; background:#fff; font-size:19px; color:#5e5e5a; cursor:pointer;">−</button>
+                <div style="width:40px; text-align:center; font-size:15px; font-weight:700; color:#1d2226; border-left:1px solid #ececea; border-right:1px solid #ececea; line-height:34px;">{{ sec.count }}</div>
+                <button class="pmc-step" onClick="{{ sec.onInc }}" style="width:34px; height:34px; border:none; background:#fff; font-size:19px; color:#5e5e5a; cursor:pointer;">+</button>
+              </div>
+              <span style="font-size:11.5px; color:#bdbdb8;">target 12</span>
+            </div>
+          </div>
+
+          <sc-if value="{{ sec.empty }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1.5px dashed #d6d5d1; border-radius:11px; padding:30px; text-align:center; color:#a0a09b; font-size:13.5px; background:#fbfbfa;">No posts yet — use the stepper above or the tile below to build this month.</div>
+          </sc-if>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(338px, 1fr)); gap:22px;">
+            <sc-for list="{{ sec.cards }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:0 3px;">
+                  <span style="font-size:12.5px; font-weight:700; color:#6a6a66; letter-spacing:0.01em;">Post #{{ c.num }}</span>
+                  <div style="display:flex; align-items:center; gap:7px;">
+                    <button class="pmc-del" onClick="{{ c.onDelete }}" title="Delete post" style="width:26px; height:26px; border-radius:7px; border:1px solid #e6e5e1; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#c0392b;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="pmc-card" style="background:#fff; border:1px solid {{ c.cardBorder }}; border-radius:11px; box-shadow:0 1px 2px rgba(0,0,0,0.05); overflow:hidden; position:relative;">
+
+                <div style="display:flex; padding:14px 16px 0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background-image:{{ photoBg }}; background-size:cover; background-position:center; flex:none; margin-right:11px;"></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="display:flex; align-items:center; gap:5px;">
+                      <span style="font-size:14px; font-weight:700; color:#1d2226;">{{ bradName }}</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="#0A66C2"><path d="M12 1l2.6 2.1 3.3-.3 1.3 3.1 3 1.4-.9 3.2.9 3.2-3 1.4-1.3 3.1-3.3-.3L12 23l-2.6-2.1-3.3.3-1.3-3.1-3-1.4.9-3.2L1.8 10l3-1.4 1.3-3.1 3.3.3z"/><path d="M10.6 14.6l-2-2-1.2 1.2 3.2 3.2 5.6-5.6-1.2-1.2z" fill="#fff"/></svg>
+                      <span style="font-size:12.5px; color:#8a8a86;">· 1st</span>
+                    </div>
+                    <div style="font-size:12px; color:#5e5e5a; line-height:1.3; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ bradTitle }}</div>
+                    <div style="font-size:11.5px; color:#8a8a86; margin-top:1px;">{{ c.time }} · 🌐</div>
+                  </div>
+                </div>
+
+                <sc-if value="{{ c.collapsed }}" hint-placeholder-val="{{ true }}">
+                  <div onClick="{{ c.onExpand }}" style="padding:11px 16px 4px; font-size:13.5px; line-height:1.45; color:{{ c.bodyColor }}; white-space:pre-wrap; min-height:20px; cursor:text;">{{ c.bodyDisplay }}</div>
+                </sc-if>
+                <sc-if value="{{ c.expanded }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:10px 14px 2px;">
+                    <textarea value="{{ body }}" onInput="{{ setBody }}" onPaste="{{ onBodyPaste }}" rows="6" placeholder="Write Sarah's post or paste from Word…" style="width:100%; padding:11px; border:1px solid #dcdbd7; border-radius:8px; font-size:13.5px; line-height:1.5; color:#1d2226; resize:vertical;"></textarea>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:5px;">
+                      <span style="font-size:10.5px; color:#a0a09b;">Paste from Word — auto-cleaned, emojis kept</span>
+                      <span style="font-size:11px; color:#a0a09b;">{{ bodyCount }} chars</span>
+                    </div>
+                    <div style="display:flex; gap:7px; margin-top:8px;">
+                      <button onClick="{{ cancelWriting }}" class="pmc-back" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px; background:#fdecec; border:1px solid #f3b4b4; padding:8px 13px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600; color:#b4332b;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b4332b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>Cancel</button>
+                      <button onClick="{{ saveText }}" class="pmc-back" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px; background:#e7f7ee; border:1px solid #b6e3cb; padding:8px 13px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; color:#1f8a5b;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1f8a5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>{{ saveTextLabel }}</button>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ c.hasFooter }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:2px 16px 10px; font-size:13.5px; line-height:1.5; color:#1d2226; white-space:pre-wrap;">{{ c.footerText }}</div>
+                </sc-if>
+                <sc-if value="{{ c.expanded }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:0 14px 12px;">
+                    <div style="font-size:11px; font-weight:700; letter-spacing:0.06em; color:#a0a09b; text-transform:uppercase; margin-bottom:7px;">Footer</div>
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                      <sc-for list="{{ footerOpts }}" as="f" hint-placeholder-count="4">
+                        <button onClick="{{ f.onClick }}" style="{{ f.style }}"><span style="font-weight:700;">{{ f.label }}</span><span style="opacity:.7;">{{ f.preview }}</span></button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ c.mediaVisible }}" hint-placeholder-val="{{ true }}">
+                  <div class="pmc-graphic" style="position:relative; margin-top:8px; width:100%; aspect-ratio:{{ c.gAspect }}; background:{{ placeholderBg }}; overflow:hidden;">
+                    <sc-if value="{{ c.noGraphic }}" hint-placeholder-val="{{ true }}">
+                      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; padding:18px; text-align:center;">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+                        <div style="font-family:ui-monospace,Menlo,monospace; color:rgba(255,255,255,0.92); font-size:11px; line-height:1.4; word-break:break-all;">{{ c.imgFilename }}</div>
+                      </div>
+                      <div style="position:absolute; inset:0; background-image:{{ c.imgBg }}; background-size:cover; background-position:center;"></div>
+                    </sc-if>
+                    <sc-if value="{{ c.hasGraphic }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:absolute; inset:0;" dangerouslySetInnerHTML="{{ c.graphicHtml }}"></div>
+                    </sc-if>
+                    <div class="pmc-gov" style="position:absolute; inset:0; background:rgba(14,34,54,0.55); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; opacity:0; transition:.15s;">
+                      <div style="display:flex; gap:2px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.55); border-radius:999px; padding:3px;">
+                        <span onClick="{{ c.onGraphicOn }}" style="{{ c.segGraphicStyle }}">Graphic</span>
+                        <span onClick="{{ c.onGraphicOff }}" style="{{ c.segNoneStyle }}">No graphic</span>
+                      </div>
+                      <button onClick="{{ c.onCustomize }}" style="display:flex; align-items:center; gap:7px; background:#fff; border:none; color:#0e2236; font-size:12.5px; font-weight:700; padding:8px 15px; border-radius:999px; cursor:pointer;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0e2236" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                        Customize template
+                      </button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ c.showAddBar }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:8px 16px 0;">
+                    <button onClick="{{ c.onAddGraphic }}" style="width:100%; display:flex; align-items:center; justify-content:center; gap:7px; padding:10px; border:1.5px dashed #cdccc8; border-radius:9px; background:#fbfbfa; color:#6a6a66; font-size:12.5px; font-weight:700; cursor:pointer;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                      Add graphic
+                    </button>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 16px 12px;">
+                  <div style="display:flex; align-items:center; gap:5px;">
+                    <div style="display:flex;">
+                      <span style="width:17px; height:17px; border-radius:50%; background:#0A66C2; display:flex; align-items:center; justify-content:center; font-size:9px; border:1.5px solid #fff; z-index:3;">👍</span>
+                      <span style="width:17px; height:17px; border-radius:50%; background:#df704d; display:flex; align-items:center; justify-content:center; font-size:9px; border:1.5px solid #fff; margin-left:-5px; z-index:2;">❤️</span>
+                      <span style="width:17px; height:17px; border-radius:50%; background:#f5bb5c; display:flex; align-items:center; justify-content:center; font-size:9px; border:1.5px solid #fff; margin-left:-5px; z-index:1;">💡</span>
+                    </div>
+                    <span style="font-size:12px; color:#8a8a86;">{{ c.likesFmt }}</span>
+                  </div>
+                  <div style="font-size:12px; color:#8a8a86;">{{ c.footerCounts }}</div>
+                </div>
+
+                </div>
+              </div>
+            </sc-for>
+
+            <button class="pmc-add" onClick="{{ sec.onAdd }}" style="min-height:230px; border:1.5px dashed #cdccc8; border-radius:11px; background:#fbfbfa; color:#9a9a95; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; font-size:14px; font-weight:600; transition:.14s;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Add post
+            </button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===================== PNG EXPORT MODAL ===================== -->
+  <sc-if value="{{ pngOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePng }}" style="position:absolute; inset:0; background:rgba(14,34,54,0.55); display:flex; align-items:center; justify-content:center; z-index:80; padding:24px;">
+      <div onClick="{{ stop }}" style="width:410px; max-width:100%; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.32); padding:26px 26px 24px;">
+        <div style="display:flex; align-items:center; gap:11px;">
+          <div style="width:34px; height:34px; border-radius:9px; background:#e7f7ee; display:flex; align-items:center; justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1f8a5b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15.5px; font-weight:800; color:#1d2226;">Download graphics as PNG</div>
+            <div style="font-size:12px; color:#9a9a95;">{{ pngSubtitle }}</div>
+          </div>
+        </div>
+        <div style="margin-top:22px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#a0a09b;">How many to download</span>
+            <span style="font-size:14px; font-weight:800; color:#1f8a5b;">{{ pngCountLabel }}</span>
+          </div>
+          <input type="range" min="1" max="{{ pngMax }}" value="{{ pngCount }}" onInput="{{ setPngCount }}" style="width:100%; accent-color:#1f8a5b;" />
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:#b0b0ab; margin-top:4px;"><span>1</span><span>All · {{ pngMax }}</span></div>
+        </div>
+        <sc-if value="{{ pngBusy }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px; display:flex; align-items:center; gap:11px;"><div style="width:20px; height:20px; border-radius:50%; border:3px solid #efe9da; border-top-color:#1f8a5b; animation:pmcspin .8s linear infinite; flex:none;"></div><span style="font-size:13px; color:#5e5e5a;">{{ pngStatus }}</span></div>
+        </sc-if>
+        <sc-if value="{{ pngIdle }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; gap:9px; margin-top:24px;">
+            <button onClick="{{ closePng }}" class="pmc-back" style="flex:none; background:#faf9f7; border:1px solid #e0dfdb; padding:11px 18px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#5e5e5a;">Cancel</button>
+            <button onClick="{{ runPngExport }}" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; background:var(--cos-grad-violet); border:1px solid transparent; padding:11px; border-radius:9px; cursor:pointer; font-size:13.5px; font-weight:700; color:#fff; box-shadow:0 6px 18px -6px rgba(104,24,248,.5);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Download {{ pngCountLabel }}</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== BRAND TEMPLATES MODAL ===================== -->
+  <sc-if value="{{ brandOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeBrand2 }}" style="position:absolute; inset:0; background:rgba(14,34,54,0.55); display:flex; align-items:center; justify-content:center; z-index:70; padding:24px;">
+      <div onClick="{{ stop }}" style="width:820px; max-width:100%; height:86vh; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.32); overflow:hidden; display:flex; flex-direction:column;">
+        <div style="padding:16px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f0efec; flex:none;">
+          <div style="display:flex; align-items:center; gap:11px;">
+            <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(120deg,#1921FE,#6818F8 45%,#C1229C 72%,#FD7715); display:flex; align-items:center; justify-content:center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FDA71A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:800; color:#1d2226;">Company Templates</div>
+              <div style="font-size:12px; color:#9a9a95;">{{ brandSubtitle }}</div>
+            </div>
+          </div>
+          <button onClick="{{ closeBrand2 }}" class="pmc-back" style="width:32px; height:32px; border-radius:8px; border:1px solid #e0dfdb; background:#faf9f7; cursor:pointer; font-size:18px; color:#6a6a66; display:flex; align-items:center; justify-content:center;">×</button>
+        </div>
+        <div class="pmc-scroll" onClick="{{ brandPick }}" style="flex:1; overflow-y:auto; padding:22px 24px; display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:14px; align-content:start;" dangerouslySetInnerHTML="{{ brandGridHtml }}"></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== GRAPHIC EDITOR MODAL ===================== -->
+  <sc-if value="{{ showGfx }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeGfx }}" style="position:absolute; inset:0; background:rgba(14,34,54,0.5); display:flex; align-items:center; justify-content:center; z-index:60; padding:24px;">
+      <div onClick="{{ stop }}" style="width:980px; max-width:100%; height:88vh; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.32); overflow:hidden; display:flex; flex-direction:column;">
+
+        <div style="padding:15px 22px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f0efec; flex:none;">
+          <div style="display:flex; align-items:center; gap:11px;">
+            <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(120deg,#1921FE,#6818F8 45%,#C1229C 72%,#FD7715); display:flex; align-items:center; justify-content:center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:800; color:#1d2226;">Graphic editor</div>
+              <div style="font-size:12px; color:#9a9a95;">{{ gfxLabel }}</div>
+            </div>
+          </div>
+          <button onClick="{{ closeGfx }}" class="pmc-back" style="width:32px; height:32px; border-radius:8px; border:1px solid #e0dfdb; background:#faf9f7; cursor:pointer; font-size:18px; color:#6a6a66; display:flex; align-items:center; justify-content:center;">×</button>
+        </div>
+
+        <div style="display:flex; flex:1; min-height:0;">
+          <div style="flex:1; background:var(--cos-mist); display:flex; align-items:center; justify-content:center; padding:26px; min-width:0;">
+            <div style="position:relative; width:100%; max-width:400px; aspect-ratio:{{ draftAspect }}; box-shadow:0 12px 34px rgba(0,0,0,.2); overflow:hidden; border-radius:4px; background:#0e2236;">
+              <div style="position:absolute; inset:0;" dangerouslySetInnerHTML="{{ draftGraphicHtml }}"></div>
+            </div>
+          </div>
+
+          <div class="pmc-scroll" style="width:368px; flex:none; border-left:1px solid #ececea; overflow-y:auto; padding:18px 22px 28px;">
+            <button onClick="{{ openBrand }}" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#0e2236; border:1px solid #0e2236; padding:11px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#fff; margin-bottom:16px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FDA71A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              See &amp; edit company templates
+            </button>
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin-bottom:10px;">Template</div>
+            <div onClick="{{ onTplClick }}" style="display:grid; grid-template-columns:repeat(3,1fr); gap:7px;" dangerouslySetInnerHTML="{{ tplHtml }}"></div>
+
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin:22px 0 10px;">Type color</div>
+            <div onClick="{{ onTxtClick }}" style="{{ colorRowStyle }}" dangerouslySetInnerHTML="{{ txtHtml }}"></div>
+
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin:22px 0 10px;">Background color</div>
+            <div onClick="{{ onBgClick }}" style="{{ colorRowStyle }}" dangerouslySetInnerHTML="{{ bgHtml }}"></div>
+
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin:22px 0 10px;">Size</div>
+            <div onClick="{{ onSizeClick }}" style="display:flex; gap:8px;" dangerouslySetInnerHTML="{{ sizeHtml }}"></div>
+
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin:22px 0 10px;">Headline text</div>
+            <textarea class="pmc-textarea pmc-input" value="{{ draftText }}" onInput="{{ setDraftText }}" rows="4" placeholder="Short, punchy line…" style="width:100%; padding:11px; border:1px solid #dcdbd7; border-radius:8px; font-size:13.5px; line-height:1.5; color:#1d2226; resize:vertical; transition:.15s;"></textarea>
+            <button onClick="{{ regenPhrase }}" class="pmc-back" style="margin-top:8px; display:inline-flex; align-items:center; gap:7px; background:#F7F2E6; border:1px solid #D9CBFF; padding:8px 13px; border-radius:8px; cursor:pointer; font-size:12.5px; font-weight:600; color:#7a6a3a;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a0843a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>New phrase from post</button>
+
+            <sc-if value="{{ draftIsHeadline }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase; margin:18px 0 10px;">Eyebrow</div>
+                <input class="pmc-input" value="{{ draftEyebrow }}" onInput="{{ setDraftEyebrow }}" style="width:100%; padding:10px 12px; border:1px solid #dcdbd7; border-radius:8px; font-size:13.5px; color:#1d2226; transition:.15s;" />
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ draftUsesImage }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="display:flex; align-items:baseline; justify-content:space-between; margin:22px 0 10px;">
+                  <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; color:#a0a09b; text-transform:uppercase;">Image gallery</div>
+                  <span style="font-size:11px; color:#bdbdb8;">founders &amp; company</span>
+                </div>
+                <div class="pmc-scroll" onClick="{{ pickImageDelegate }}" style="max-height:248px; overflow-y:auto; padding-right:4px;" dangerouslySetInnerHTML="{{ galleryHtml }}"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ draftNoImage }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:18px; font-size:11.5px; color:#a0a09b; line-height:1.5; background:#faf9f7; border:1px solid #ececea; border-radius:9px; padding:11px 13px;">This template uses Sarah's headshot (from the header) or no photo. The <b style="color:#6a6a66;">Photo quote</b>, <b style="color:#6a6a66;">Spokesperson</b> and <b style="color:#6a6a66;">Photo</b> templates pull from the image gallery.</div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="padding:14px 22px; border-top:1px solid #f0efec; display:flex; align-items:center; justify-content:space-between; gap:10px; flex:none;">
+          <button onClick="{{ openBuilder }}" class="pmc-back" style="display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #dcdbd7; padding:9px 14px; border-radius:9px; cursor:pointer; font-size:12.5px; font-weight:600; color:#3b3b38;">
+            Open full Graphics Builder
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a9a95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+          </button>
+          <div style="display:flex; gap:10px;">
+            <sc-if value="{{ draftExisting }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ removeGfx }}" class="pmc-back" style="background:#faf9f7; border:1px solid #e0dfdb; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#b4332b;">Remove graphic</button>
+            </sc-if>
+            <button onClick="{{ closeGfx }}" class="pmc-back" style="background:#faf9f7; border:1px solid #e0dfdb; padding:10px 16px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#3b3b38;">Cancel</button>
+            <button onClick="{{ applyGfx }}" style="background:var(--cos-grad-violet); border:1px solid transparent; padding:10px 18px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#fff; box-shadow:0 8px 20px -8px rgba(104,24,248,.6);">Apply to post</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== SEND MODAL (HubSpot / Review) ===================== -->
+  <sc-if value="{{ showModal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:absolute; inset:0; background:rgba(14,34,54,0.42); display:flex; align-items:center; justify-content:center; z-index:50; padding:24px;">
+      <div onClick="{{ stop }}" style="width:440px; max-width:100%; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.25); overflow:hidden;">
+        <div style="padding:22px 26px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #f0efec;">
+          <div style="width:40px; height:40px; border-radius:10px; background:{{ modalAccent }}; display:flex; align-items:center; justify-content:center;" dangerouslySetInnerHTML="{{ modalIcon }}"></div>
+          <div>
+            <div style="font-size:16px; font-weight:800; color:#1d2226;">{{ modalTitle }}</div>
+            <div style="font-size:12.5px; color:#9a9a95;">{{ modalSubtitle }}</div>
+          </div>
+        </div>
+
+        <div style="padding:24px 26px;">
+          <sc-if value="{{ modalSending }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:14px 0;">
+              <div style="width:42px; height:42px; border-radius:50%; border:3px solid #efe9da; border-top-color:{{ modalAccent }}; animation:pmcspin .8s linear infinite;"></div>
+              <div style="font-size:14px; font-weight:600; color:#3b3b38;">{{ modalSendingText }}</div>
+              <div style="font-size:12.5px; color:#9a9a95; text-align:center;">{{ modalSendingSub }}</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ modalDone }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:6px 0;">
+              <div style="width:48px; height:48px; border-radius:50%; background:#e7f7ee; display:flex; align-items:center; justify-content:center;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F8A5B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <div style="font-size:16px; font-weight:800; color:#1d2226; text-align:center;">{{ modalDoneTitle }}</div>
+              <div style="font-size:13px; color:#6a6a66; line-height:1.5; text-align:center;">{{ modalDoneText }}</div>
+              <div style="width:100%; background:#faf9f7; border:1px solid #ececea; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#5e5e5a; line-height:1.7;" dangerouslySetInnerHTML="{{ modalBullets }}"></div>
+              <div style="display:flex; gap:10px; width:100%; margin-top:4px;">
+                <button class="pmc-back" onClick="{{ downloadPayload }}" style="flex:1; background:#faf9f7; border:1px solid #e0dfdb; padding:11px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:600; color:#3b3b38;">{{ modalDownloadLabel }}</button>
+                <button onClick="{{ closeModal }}" style="flex:1; background:{{ modalAccent }}; border:1px solid {{ modalAccent }}; padding:11px; border-radius:9px; cursor:pointer; font-size:13px; font-weight:700; color:#fff;">Done</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#6818F8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Appearance&quot;,&quot;options&quot;:[&quot;#6818F8&quot;,&quot;#1e4a85&quot;,&quot;#22867c&quot;,&quot;#2e9e62&quot;,&quot;#b4332b&quot;]},&quot;showEngagement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;monthlyTarget&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:12,&quot;min&quot;:1,&quot;max&quot;:30,&quot;unit&quot;:&quot; posts&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Workflow&quot;},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;current&quot;,&quot;options&quot;:[&quot;current&quot;,&quot;all&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Workflow&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = {
+      view: "gallery",
+      selectedMonths: [6],
+      editIndex: 0,
+      expandedIndex: null,
+      photo: "assets/brad.jpg",
+      photoColor: "#1e4a85",
+      bradTitle: this.BRAD_TITLE,
+      team: null,
+      teamOpen: false,
+      posts: this.makeDefaults(),
+      modal: null, // {stage:'sending'|'done', count}
+      gfx: null,   // {postIdx, draft, existing}
+      brandOpen: false,
+      dlOpen: false,
+      bradOpen: false,
+      pngOpen: false, pngBusy: false, pngCount: 1, savedFlash: false,
+      genBusy: false,
+      linkOpen: false,
+      linkDraft: "",
+      cloud: { ready:false, user:null, skip:false },
+    };
+    const saved=this._loadSaved();
+    if(saved){ this.state=Object.assign({}, this.state, saved); }
+    // Default view is always a single-month gallery of the current month
+    this.state.selectedMonths=[this.CURRENT];
+  }
+
+  SAVE_KEY = "conneticPostBuilder.v7";
+  FIRM_ID = "havener";
+  CLIENT_ID = "connetic";
+  _loadSaved(){ try{ const r=localStorage.getItem(this.SAVE_KEY); if(r){ const d=JSON.parse(r); if(d&&Array.isArray(d.posts)&&d.posts.length) return d; } }catch(e){} return null; }
+  _persist(){ try{ const {posts,photo,photoColor,bradTitle,selectedMonths,team}=this.state; localStorage.setItem(this.SAVE_KEY, JSON.stringify({posts,photo,photoColor,bradTitle,selectedMonths,team})); }catch(e){} this._cloudSave(); }
+  componentDidUpdate(pp, ps){
+    if(!ps) return;
+    if(ps.posts!==this.state.posts || ps.photo!==this.state.photo || ps.photoColor!==this.state.photoColor || ps.bradTitle!==this.state.bradTitle || ps.selectedMonths!==this.state.selectedMonths || ps.team!==this.state.team) this._persist();
+    // A teammate's update arrived while editing — apply it now that editing is done.
+    if(this._pendingRemote && this.state.expandedIndex==null && !this.state.gfx){
+      const d=this._pendingRemote; this._pendingRemote=null; this._applyRemote(d);
+    }
+  }
+
+  // ---- Firebase cloud sync ----
+  FB_CONFIG = {
+    apiKey: "AIzaSyA1KEEmOYz4lg05Dmlvx6IGt9rRXdux7kw",
+    authDomain: "post-builder-404a8.firebaseapp.com",
+    projectId: "post-builder-404a8",
+    storageBucket: "post-builder-404a8.firebasestorage.app",
+    messagingSenderId: "854779247659",
+    appId: "1:854779247659:web:ad4ac8c07a914caecdbe6e",
+    measurementId: "G-GMKGFB1ZDH"
+  };
+  FB_URLS = [
+    "https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js",
+    "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"
+  ];
+  componentDidMount(){ this._initCloud(); }
+  _startCloud(){ if(window.PBCloud) this._cloudStart(); }
+  _initCloud(){
+    if(window.PBCloud){ this._startCloud(); return; }
+    const urls=this.FB_URLS.slice(); let i=0;
+    const init=()=>{
+      if(!window.firebase){ console.warn("Firebase failed to load"); return; }
+      try{
+        if(!window.firebase.apps || !window.firebase.apps.length) window.firebase.initializeApp(this.FB_CONFIG);
+        const db=window.firebase.firestore();
+        const wsRef=db.collection("firms").doc(this.FIRM_ID).collection("clients").doc(this.CLIENT_ID);
+        const inboxRef=wsRef.collection("inbox");
+        window.PBCloud={
+          load:()=>wsRef.get().then(s=>s.exists?s.data():null),
+          save:(data)=>wsRef.set(data),
+          subscribe:(cb)=>wsRef.onSnapshot(
+            s=>{ if(s.exists) cb(s.data(), s.metadata); },
+            e=>console.warn("cloud subscribe failed", e)
+          ),
+          subscribeInbox:(cb)=>inboxRef.onSnapshot(
+            snap=>{ const arr=[]; snap.forEach(d=>arr.push(d.data())); cb(arr); },
+            e=>console.warn("inbox subscribe failed", e)
+          ),
+        };
+        this._startCloud();
+      }catch(e){ console.warn("Firebase init error", e); }
+    };
+    const next=()=>{
+      if(i>=urls.length){ init(); return; }
+      const sc=document.createElement("script");
+      sc.src=urls[i++]; sc.async=false;
+      sc.onload=next; sc.onerror=()=>console.warn("Firebase script failed:", sc.src);
+      document.head.appendChild(sc);
+    };
+    next();
+  }
+  async _cloudStart(){
+    this.setState(p=>({ cloud:{ ...p.cloud, ready:true } }));
+    try{
+      const remote = await window.PBCloud.load();
+      if(remote && Array.isArray(remote.posts) && remote.posts.length){
+        this._applyRemote(remote, true);   // adopt the team's latest
+      } else {
+        this._cloudSave(true); // first ever run → seed the shared workspace
+      }
+    }catch(e){ console.warn("cloud load failed", e); }
+    this._subscribeShared();
+    this._subscribeInbox();
+  }
+  _subscribeShared(){
+    if(this._unsub || !window.PBCloud || !window.PBCloud.subscribe) return;
+    this._unsub = window.PBCloud.subscribe((data, meta)=>{
+      if(!data) return;
+      if(meta && meta.hasPendingWrites) return;              // our own not-yet-committed write
+      if(data.rev && data.rev === this._lastLocalRev) return; // echo of our own last save
+      // Don't yank the ground out while someone is mid-edit — apply once they finish.
+      if(this.state.expandedIndex!=null || this.state.gfx){ this._pendingRemote = data; return; }
+      this._applyRemote(data);
+    });
+  }
+  _applyRemote(data, initial){
+    if(!data || !Array.isArray(data.posts)) return;
+    this._suppressSave = true;   // applying a teammate's update must not bounce back as a new write
+    const patch = { posts:data.posts };
+    if(data.photo!=null) patch.photo = data.photo;
+    if(data.photoColor!=null) patch.photoColor = data.photoColor;
+    if(data.bradTitle!=null) patch.bradTitle = data.bradTitle;
+    if(data.rev) this._lastLocalRev = data.rev;
+    this.setState(patch, ()=>{
+      this._suppressSave = false;
+      if(initial) this.setState({ selectedMonths:[this.CURRENT] });
+    });
+  }
+  _cloudSave(now){
+    if(this._suppressSave) return;
+    if(!window.PBCloud) return;
+    clearTimeout(this._cloudT);
+    const go=()=>{ const {posts,photo,photoColor,bradTitle}=this.state;
+      if(!this._clientId) this._clientId=Math.random().toString(36).slice(2,8);
+      const rev = Date.now()+"-"+this._clientId;
+      this._lastLocalRev = rev;
+      window.PBCloud.save({posts,photo,photoColor,bradTitle, rev})
+        .catch(e=>console.warn("cloud save failed", e)); };
+    if(now) go(); else this._cloudT=setTimeout(go, 800);
+  }
+  componentWillUnmount(){
+    if(this._unsub){ try{ this._unsub(); }catch(e){} this._unsub=null; }
+    if(this._unsubInbox){ try{ this._unsubInbox(); }catch(e){} this._unsubInbox=null; }
+  }
+
+  // ---- Inbox: posts pushed in from the writer app, matched by year + month + post # ----
+  _subscribeInbox(){
+    if(this._unsubInbox || !window.PBCloud || !window.PBCloud.subscribeInbox) return;
+    this._unsubInbox = window.PBCloud.subscribeInbox(items=>{ this._applyInbox(items); });
+  }
+  _applyInbox(items){
+    if(!Array.isArray(items) || !items.length) return;
+    this.setState(s=>{
+      let posts=s.posts.slice();
+      let dirty=false;
+      // apply lower post numbers first so cards fill in order
+      const sorted=items.slice().sort((a,b)=> (Number(a.month)-Number(b.month)) || (Number(a.postNumber)-Number(b.postNumber)) );
+      sorted.forEach(it=>{
+        const year=Number(it.year), month=Number(it.month), num=Number(it.postNumber);
+        if(!year || !month || !num) return;
+        if(year!==this.YEAR) return;              // this app currently handles one year
+        const mi=month-1;
+        if(mi<0 || mi>11) return;
+        const rev=String(it.sentAt || it.rev || it.body || "");
+        const body=(it.body!=null ? it.body : "").toString();
+        let positions=[];
+        posts.forEach((p,idx)=>{ if(p.monthIndex===mi) positions.push(idx); });
+        while(positions.length < num){ posts.push(this.blankPost(mi)); positions.push(posts.length-1); dirty=true; }
+        const targetIdx=positions[num-1];
+        const tp=posts[targetIdx];
+        if(tp.importRev===rev) return;           // this exact version already applied (respects later manual edits)
+        posts[targetIdx]={...tp, body, importKey:year+"-"+month+"-"+num, importRev:rev};
+        dirty=true;
+      });
+      return dirty ? { posts } : {};
+    });
+  }
+
+  MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  MSHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  YEAR = 2026;
+  CURRENT = 6;
+  BRAD_NAME = "Sarah Mitchell";
+  BRAD_TITLE = "Co-Founder & CTO, CatalystOS";
+  BUILDER_URL = "https://claude.ai/design/p/dea9ad5b-5ed1-48c3-b4ad-efdb82d3891e?file=Connetic+Founder+Studio.dc.html&via=share";
+  PLACEHOLDER_BG = "linear-gradient(135deg,#081A53,#6818F8)";
+  SWATCHES = ["#081A53","#6818F8","#C1229C","#1921FE","#050E30","#FDA71A"];
+  COLORS_G = { navy:"#1e4a85", teal:"#22867c", green:"#2e9e62", ink:"#0e2236" };
+  COMPANY_IMGS = [
+    "assets/img/connetic-network.png","assets/img/connetic-tech.png","assets/img/wendal.jpg",
+  ];
+  FOUNDER_IMGS = [
+    "assets/brad.jpg",
+    "assets/founders_sarah/01.png","assets/founders_sarah/02.png","assets/founders_sarah/03.png",
+    "assets/founders_sarah/04.png","assets/founders_sarah/05.png","assets/founders_sarah/06.png",
+    "assets/founders_sarah/07.png","assets/founders_sarah/08.png","assets/founders_sarah/09.png",
+    "assets/founders_sarah/10.png","assets/founders_sarah/11.png",
+  ];
+  LIB = [
+    {id:"network", src:"assets/img/connetic-network.png", label:"Network"},
+    {id:"tech", src:"assets/img/connetic-tech.png", label:"Tech map"},
+    {id:"brad1", src:"assets/founders_sarah/02.png", label:"Sarah — stage"},
+    {id:"brad2", src:"assets/founders_sarah/03.png", label:"Sarah — candid"},
+  ];
+  GFX_TPL = [["statement","Statement"],["megastatement","Big statement"],["headline","Headline"],["spotlight","Spotlight"],["bigcenter","Center quote"],["twopart","Two-part"],["arrowpoint","Arrow point"],["list","Numbered list"],["arrowlist","Arrow list"],["socialcard","Social card"],["photoquote","Photo quote"],["spokesperson","Spokesperson"],["image","Photo"],["videoph","Video placeholder"]];
+  GFX_VAR = [["navy","Midnight","#0C1B54"],["teal","Cobalt","#1B2A7A"],["green","Aurora","#3A1E86"],["ink","Ink","#060C28"]];
+  TPL_VAR = { statement:"navy", megastatement:"ink", headline:"teal", spotlight:"navy", bigcenter:"green", twopart:"ink", arrowpoint:"teal", list:"navy", arrowlist:"green", socialcard:"teal", photoquote:"ink", spokesperson:"navy", image:"ink", videoph:"navy" };
+  GFX_TXT = [["White","#FFFFFF"],["Ink","#081A53"],["Gold","#FDA71A"],["Violet","#B58CFF"]];
+  GFX_BG = [["Navy","#081A53"],["Violet","#2A1A6B"],["Plum","#4A1440"],["Ink","#050B22"],["Light","#F5F7FA"]];
+  GFX_SIZE = [["square","1200 × 1200"],["banner","1200 × 627"],["tall","1200 × 1600"]];
+  FOOTERS = [
+    "∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿\n\n📌 Exposure to innovation outside of public markets.\n\n📞 Let's talk about what that could look like in your practice.",
+    "∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿\n\n🤝 Private-market access, built for everyday portfolios.\n\n📩 DM me to see how it could fit your clients.",
+    "∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿\n\n🚀 Early-stage venture — without the warm intro.\n\n📅 Grab 15 minutes and let's map it to your practice.",
+  ];
+  FOOTER_LABELS = ["Practice CTA","Advisor DM","Book a call"];
+  footerPreview(i){ const ln=this.FOOTERS[i].split("\n").filter(s=>s.trim()); const t=(ln[1]||"").replace(/^[^\sA-Za-z]+\s*/,""); return t.length>34? t.slice(0,33)+"…" : t; }
+
+  makeDefaults(){
+    const JUNE = [
+      "Every advisor I talk to does something interesting for their high-net-worth clients.\n\nAsk them what they're doing for everyone else? Crickets.\n\nI spent 27 years as an RIA. The honest truth: I believe the whole industry organizes itself around the top of the book.\n\nHigh-net-worth gets the custom model, the alternatives allocation, the thoughtful diversification. Sub-$2 million? Here's the 60/40. Good luck.\n\nBut if a product is sound, legal, registered, and the minimum is accessible \u2014 why does the reflex kick in to say \u201cthis is only for my high-net-worth clients\u201d?\n\nThe answer is almost never about the investment. It's about habit. It's how the industry was wired before the products existed to serve everyone.\n\nThat's changing. Regulation is changing. Product structures are changing. The advisors who learn to build for sub-$2M before the next wave does it for them are going to have a real edge.\n\nIf you started an RIA tomorrow from scratch, what would you do differently for that client segment? \uD83D\uDC47",
+      "92% of venture deals come from a warm intro.\n\nSit with that number. Nine out of ten checks are spoken for before a founder says a single word \u2014 decided by who they know, not what they're building.\n\nI've been on the other side of that wall. It isn't that the gatekept founders are weaker. It's that the system was never designed to find them in the first place.\n\nSo we built Wendal, our AI analyst, to delete the filter entirely. Every application gets the same 20-minute conversation and the same rigor \u2014 whether you're in Palo Alto or Paducah.\n\nNo deck. No resume. No \u201cremind me who introduced us?\u201d\n\nThe algorithm genuinely does not care who you know. For a lot of founders, that's the first fair shot they've ever gotten.\n\nWhat would you build if access wasn't the bottleneck?",
+      "We've now assessed 25,000 founders.\n\nNot from a warm-intro list. Not from a demo day. From people who simply applied \u2014 most of whom no traditional VC would have ever taken a meeting with.\n\nThat's more than 4,000 outcome data points, teaching Wendal what grit, resilience, and temperament actually look like in the wild. Not what they look like in a rehearsed pitch.\n\nHere's what surprised me after 27 years in this business: the signal was never where the industry told us to look. It wasn't the pedigree. It wasn't the intro. It was the founder.\n\nWhen you measure the right things, a fairer yes and a faster no fall out on their own.\n\nWhat signal do you trust most when you're betting on people?",
+      "The hardest word in venture capital isn't \u201cno.\u201d\n\nIt's *delivering* one. Most founders never actually get it \u2014 they get ghosted for six months and left to infer it.\n\nThat's the quiet cruelty of this industry. It costs a fund nothing to stay silent, and it costs the founder everything.\n\nSo we made a promise we actually keep: 92% of founders get a clear yes or no within three business days. And if it's a no, you get the why \u2014 not a form letter, a reason.\n\nFast, honest feedback is the cheapest respect we can pay someone who is pouring their life into a company.\n\nWhen did a clear \u2018no\u2019 help you more than silence ever could?",
+      "A pitch meeting is a beauty contest.\n\nMost VCs decide in the first ten minutes \u2014 on charisma, polish, and how closely the founder pattern-matches to the last person who raised. That's not analysis. That's vibes in a blazer.\n\nI watched it for 27 years. The most relentless, most coachable founders often present the worst, because they spent their time building instead of rehearsing.\n\nWendal spends 20 honest minutes measuring the things that actually predict outcomes: resilience, leadership, temperament, clarity of thought. No deck required.\n\nIt turns out that when you stop grading the performance, you find a very different \u2014 and much larger \u2014 set of winners.\n\nWhat's the most overrated thing our industry rewards in a pitch?",
+      "I've been the founder getting ghosted. I've also been the advisor on the other side of the table. That combination is the whole reason CatalystOS exists.\n\nWe didn't \u201cadd AI\u201d to an old playbook. We pioneered AI-driven venture capital \u2014 seven years training Wendal before it became the buzzword on every fund's homepage.\n\nFounder empathy isn't our tagline. It's the spec we built the entire system against.\n\nBecause I remember exactly what it felt like to be smart, prepared, and still locked out of the room for reasons that had nothing to do with the work.\n\nThe goal was never a cleverer machine. It was a fairer door.\n\nWhat's one door you wish someone had opened for you earlier?",
+      "We're sector agnostic, and we actually mean it.\n\nHealthcare to fintech, infrastructure to consumer \u2014 we follow great founders, not whatever's trending on the timeline this quarter. \uD83D\uDE80\n\nWe write $250K to $500K at pre-seed and seed, into software-driven businesses valued at $15M or below. Small enough to move fast. Early enough to actually change the trajectory.\n\nWhat we're not doing is waiting for three other logos to commit before we'll look at you. \u201cWho else is in?\u201d might be the most overrated question in this entire industry.\n\nWe'd rather ask two things ourselves: is this founder relentless, and is the problem real?\n\nIf you're building something that fits, you don't need an intro. You need 20 minutes.",
+      "34 states funded.\n\nNot a line on a slide \u2014 actual checks written into 34 different states. The next great company is not sitting in a coastal zip code waiting for permission.\n\nWhen I was an RIA, I watched brilliant operators in overlooked cities get passed over for no reason other than their area code. Capital clustered where it always had. Talent didn't.\n\nGeography is not a proxy for ability. It never was. It was just an easy filter for funds that didn't want to do the actual work.\n\nWendal does the work \u2014 the same way, everywhere.\n\nWhere's the most underrated place you've seen real talent come from?",
+      "Diversity, for us, isn't a quota. It's an output.\n\n46% of our portfolio CEOs are women or minorities. The venture industry average is about 15%. We didn't get there with a mandate.\n\nWe got there by building the bias out of the process before it could sneak in. When an AI reads your application instead of your last name, your network, or your accent, the math quietly changes on its own.\n\nThis is the part I wish more people understood: fairness isn't in tension with returns. A wider net is simply a better net.\n\nYou don't have to choose between doing this right and doing this well.\n\nWhere else do you think \u2018fix the process\u2019 beats \u2018set a target\u2019?",
+      "Access shouldn't stop at the founder.\n\nIt's why we built VCAFX \u2014 bringing a venture strategy into a registered, 40-Act interval-fund structure, so more investors can reach the kind of early-stage upside that used to be invitation-only.\n\nThis is the advisor conversation I care most about. For decades, private markets were a top-of-the-book privilege. Sound product, real diversification \u2014 but quietly walled off from the sub-$2M client.\n\nThe structure finally exists to change that.\n\nThe advisors who learn to offer it thoughtfully \u2014 to everyone who qualifies, not just the wealthiest \u2014 are going to look very smart in ten years.\n\nWhat would it take for you to bring private markets to your whole book? \uD83D\uDC47",
+    ];
+    const MAY = [
+      "If you were starting an RIA tomorrow, from scratch, what would you build differently?\n\nI ask advisors this constantly. The answers are always bold \u2014 until I point out they could do most of it for their existing clients on Monday.\n\nThe gap between \u201chow I'd design it\u201d and \u201chow I run it\u201d is almost never about capability. It's about inertia.\n\nThe whole industry was wired before the products existed to serve everyone. That wiring is finally loosening.\n\nThe advisors who act on the new structure first won't just be early \u2014 they'll be the ones their clients tell their friends about.\n\nSo I'll ask you the same question: what would you do differently?",
+      "\u201cThis is only for my high-net-worth clients.\u201d\n\nI've heard that reflex in a hundred rooms. And when I ask why \u2014 if the product is sound, legal, registered, and the minimum is accessible \u2014 the honest answer is rarely about the investment.\n\nIt's habit. It's how we were trained before the tools existed to do better.\n\nI spent 27 years inside that habit. I understand it completely. I also think it's the single biggest unexamined assumption in wealth management today.\n\nWhat assumption in your own practice would you most like to retire?",
+      "Pattern-matching funds the last decade. Data-driven conviction funds the next one.\n\nFor 27 years I watched capital flow to whoever looked most like the last success story. It felt rigorous. Mostly it was nostalgia with a spreadsheet attached.\n\nThe firms that win the next cycle won't be the ones with the best instincts about the past. They'll be the ones with the cleanest read on the present.\n\nThat's the bet behind everything we've built at CatalystOS.\n\nWhere do you think instinct still genuinely beats data \u2014 and where is it just comfortable?",
+      "Founders remember who took the meeting when they were a nobody.\n\nSo do clients, honestly. The advisor who treated a $200K account like it mattered earns the $2M rollover a decade later.\n\nThis business rewards patience and fairness far more than it likes to admit.\n\nWe built CatalystOS on the same principle: take the meeting, do the real work, give the honest answer \u2014 regardless of whose name is on the door or how big the check is.\n\nWho took a chance on you before you \u2018deserved\u2019 it?",
+      "Speed is a form of respect.\n\nThe average venture process runs four to six months. Ours runs about two weeks, from first conversation to term sheet.\n\nWe're not fast because we cut corners. We're fast because Wendal handles the diligence other firms park on a junior analyst's calendar for a quarter.\n\nEvery week a founder spends fundraising is a week they're not building. Giving that time back is the cheapest, highest-value capital we can offer anyone.\n\nWhere is slowness quietly costing your clients the most?",
+      "Most people will never see a real venture deal in their lifetime.\n\nFor most of my career, I'd have told you that's just how it works. Now I think it's a design flaw \u2014 not a law of nature.\n\nThe minimums, the structures, the access: all of it was built for a world that no longer has to exist.\n\nThe interesting question isn't whether that changes. It's who helps their clients walk through the door first.\n\nIs your practice ready for that conversation?",
+    ];
+    const BATCH_EXTRA = [
+      "“Who else is investing?” might be the most overrated question in venture.\n\nIt's a tell. It means the fund wants someone else to supply the conviction for them.\n\nI spent 27 years learning that borrowed conviction is the most expensive kind. It feels safe right up until everyone heads for the same exit at the same moment.\n\nWe'd rather answer two questions ourselves: is the founder relentless, and is the problem real?\n\nEverything else is mostly noise dressed up as diligence.\n\nWhat's a question you've stopped asking because you realized it was just cover?",
+      "Bias doesn't announce itself.\n\nIt hides in “gut feel,” in “fit,” in “who else is in the round,” in “I just didn't connect with them.”\n\nFor 27 years I made those calls myself. Some of them I still think about.\n\nWendal doesn't have a gut. That isn't a limitation — it's the entire point. It evaluates the founder in front of it, not the founder it expected to see.\n\nWe didn't remove human judgment because humans are bad at it. We removed it from the first filter because that's exactly where bias does its quietest, most expensive damage.\n\nWhere do you think ‘gut feel’ truly helps — and where does it just protect the status quo?",
+      "We write $250K to $500K at pre-seed and seed.\n\nSmall enough to move fast. Big enough to matter. Early enough to actually shape the trajectory — instead of just renting a logo on the cap table.\n\nThe check size is a philosophy, not only a number. We'd rather be meaningfully early to many great founders than marginally late to a famous few.\n\nEarly and fair beats large and crowded, at least at the stage we play.\n\nWhat's the most leverage you've ever seen come from a small, early bet?",
+      "Wendal reviewed an application at 2am on a Sunday with the exact rigor it applies at 2pm on a Tuesday.\n\nThat kind of consistency is something no human committee can ship. We get tired. We get hungry before lunch. We quietly favor the founder who reminds us of ourselves.\n\nThat inconsistency isn't a character flaw — it's just being human. The mistake is building a fairness-critical process on top of it and pretending it's objective.\n\nSeven years of training went into making the first read the same for everyone, every time.\n\nWhere in your work would ‘the same answer every time’ be worth the most?",
+      "I keep coming back to one question.\n\nIf the features and benefits of a product are sound, and it's legal and registered, and the minimum is accessible — why does the reflex still kick in to say “this is only for my best clients”?\n\nI've asked it in rooms full of advisors. The answer is almost never about the investment. It's about how the industry was wired before the products existed to serve everyone.\n\nThat wiring is exactly what we're all quietly competing to undo.\n\nWhat's one thing your clients deserve that habit is still gatekeeping?",
+      "Open access isn't charity. It's edge.\n\nWhen you remove the warm-intro filter, you start meeting founders the rest of the market never even sees. That's not a feel-good story — that's where the asymmetry lives.\n\nThe same is true in wealth management. The advisor who serves the whole book, not just the top of it, builds relationships the incumbents structurally can't.\n\nFairness and advantage point in the same direction far more often than this industry pretends.\n\nWhere have you found real edge by serving the people everyone else overlooked?",
+      "100+ portfolio companies. 25,000 founders assessed. Seven years of AI. 34 states.\n\nThe numbers are nice. But none of them is the scoreboard I actually watch.\n\nThe only one that matters: can a great founder — or a sub-$2M client — finally get a fair shot at something that used to be walled off?\n\nEverything else is just evidence for or against that single question.\n\nAfter 27 years, that's the metric I wish I'd been tracking the whole time.\n\nWhat's the one number that actually tells you you're winning?",
+      "Regulation is changing. Product structures are changing. The walls around private markets are coming down whether the industry is ready or not.\n\nI've lived through enough cycles to know how this plays out. The firms that treat the change as a threat spend years defending the old model. The ones that treat it as an opening quietly rebuild for the client they used to turn away.\n\nThe advisors who learn to build for the sub-$2M household before the next wave does it for them are going to have a real, durable edge.\n\nAre you building for the rule that exists today — or the one that's obviously coming?",
+    ];
+    const POOL = JUNE.concat(MAY, BATCH_EXTRA);
+    const times = ["2h","5h","1d","3h","8h","6h","1w","4h","2d","7h","1d","9h"];
+    const TPOOL = ["statement","spotlight","photoquote","megastatement","bigcenter","spokesperson","headline","twopart","arrowpoint","socialcard"];
+    const VARS = ["navy","teal","green","ink"];
+    const COMPANY = ["assets/img/connetic-network.png","assets/img/connetic-tech.png"];
+    const FOUNDER = ["assets/brad.jpg","assets/founders_sarah/02.png","assets/founders_sarah/03.png"];
+    const COUNTS = [10,8,11,9,12,7,12,9,10,8,11,9];
+    const rnd = (arr)=> arr[Math.floor(Math.random()*arr.length)];
+    const shuffle = (arr)=>{ const a=arr.slice(); for(let k=a.length-1;k>0;k--){ const j=Math.floor(Math.random()*(k+1)); [a[k],a[j]]=[a[j],a[k]]; } return a; };
+    const out = [];
+    for(let mi=0; mi<12; mi++){
+      const n = COUNTS[mi];
+      const photoQueue = shuffle(FOUNDER);       // each founder photo at most once per month
+      const tplCount = {};
+      const under = (t)=> (tplCount[t]||0) < 2;  // no base template more than 2x per batch
+      const photoOnlyTarget = Math.max(0, Math.round(n*0.1));
+      let photoOnlyMade = 0;
+      for(let i=0;i<n;i++){
+        const cap = POOL[(mi*4 + i) % POOL.length];
+        let tpl, image;
+        if(photoOnlyMade < photoOnlyTarget && photoQueue.length && under("image")){
+          tpl = "image"; image = photoQueue.pop(); photoOnlyMade++;
+        } else {
+          let avail = TPOOL.filter(under);
+          if(!photoQueue.length) avail = avail.filter(t=>t!=="spokesperson");
+          if(!avail.length) avail = TPOOL.filter(t=>t!=="spokesperson");
+          tpl = rnd(avail);
+          if(tpl==="spokesperson" && photoQueue.length){ image = photoQueue.pop(); }
+          else { image = rnd(COMPANY); }
+        }
+        tplCount[tpl] = (tplCount[tpl]||0) + 1;
+        out.push({
+          monthIndex: mi,
+          body: cap,
+          degree: "1st",
+          time: times[i % times.length],
+          verified: true,
+          hasMedia: true,
+          image: null,
+          graphic: { template:tpl, variant:rnd(VARS), image, size:"square", autoText:true },
+          footer: 0,
+          likes: String(680 + i*190 + mi*60),
+          comments: String(34 + i*13),
+          reposts: String(11 + i*7),
+        });
+      }
+    }
+    return out;
+  }
+
+  /* ---------- helpers ---------- */
+  mm(mi){ return String(mi+1).padStart(2,"0"); }
+  folderName(mi){ return this.YEAR+"_"+this.mm(mi)+"_Founder_Led_Sarah"; }
+  fileName(mi, num){ return this.folderName(mi)+"_"+num+".png"; }
+  imgPath(post, num){ return post.image || (this.folderName(post.monthIndex)+"/"+this.fileName(post.monthIndex, num)); }
+
+  monthPostIndices(mi){
+    return this.state.posts.map((p,i)=>({p,i})).filter(o=>o.p.monthIndex===mi).map(o=>o.i);
+  }
+  numOf(idx){
+    const cur = this.state.posts[idx];
+    return this.monthPostIndices(cur.monthIndex).indexOf(idx) + 1;
+  }
+
+  fmt(n){
+    const v = parseInt(n||"0",10) || 0;
+    if (v >= 1000){ const t=v/1000; return (t>=100?Math.round(t):t.toFixed(1).replace(/\.0$/,""))+"K"; }
+    return String(v);
+  }
+  degLabel(d){ return d==="none" ? "" : "• "+d; }
+
+  icon(kind){
+    const c="#5e5e5a";
+    const m={
+      like:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v9H4a1 1 0 01-1-1v-7a1 1 0 011-1h3zm0 0l4-7a2 2 0 012.7-.8c.7.4 1 1.2.8 2L13.5 9H19a2 2 0 012 2.3l-1.1 6.5a2 2 0 01-2 1.7H7"/></svg>`,
+      comment:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 01-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1121 11.5z"/></svg>`,
+      repost:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>`,
+      send:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>`,
+    };
+    return m[kind];
+  }
+  trackStyle(on){ return `width:38px; height:22px; border-radius:999px; flex:none; position:relative; transition:.18s; background:${on?'#6818F8':'#cfcdc8'};`; }
+  knobStyle(on){ return `position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.18s; transform:translateX(${on?'16px':'0'}); box-shadow:0 1px 2px rgba(0,0,0,.2);`; }
+
+  /* ---------- mutations ---------- */
+  set(k){ return (e)=> this.updateCur(k, e.target.value); }
+  setNum(k){ return (e)=> this.updateCur(k, e.target.value.replace(/[^0-9]/g,"")); }
+  updateCur(k, v){
+    this.setState(p=>{ const i=p.expandedIndex; if(i==null||!p.posts[i]) return {}; const posts=p.posts.slice(); posts[i]={...posts[i],[k]:v}; return {posts}; });
+  }
+  toggleCur(k){
+    this.setState(p=>{ const i=p.expandedIndex; if(i==null||!p.posts[i]) return {}; const posts=p.posts.slice(); posts[i]={...posts[i],[k]:!posts[i][k]}; return {posts}; });
+  }
+  onAvatarFile = (e)=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>this.setState({photo:r.result}); r.readAsDataURL(f);
+  };
+  onMediaUpload = (e)=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>this.updateCur("image", r.result); r.readAsDataURL(f);
+  };
+
+  blankPost(mi){
+    return { monthIndex:mi, body:"", degree:"1st", time:"now", verified:true, hasMedia:true, image:null, graphic:null, footer:0, linkedProject:null, likes:"0", comments:"0", reposts:"0" };
+  }
+  aspectOf(size){ return size==="banner" ? "1.91/1" : size==="tall" ? "3/4" : "1/1"; }
+  deriveText(body){
+    const strip = (t)=> (t||"")
+      .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}]/gu,"")
+      .replace(/\*/g,"")
+      .replace(/\s+/g," ")
+      .trim();
+    const raw = (body||"").replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}]/gu,"");
+    // Break the whole post into candidate sentences (across paragraphs).
+    const sentences=[];
+    raw.split(/\n+/).forEach(line=>{
+      (line.match(/[^.!?]+[.!?]*/g) || []).forEach(c=>{ const t=strip(c); if(t) sentences.push(t); });
+    });
+    if(!sentences.length){ const s=strip(raw); return s.length>110 ? s.slice(0,107).trim()+"\u2026" : s; }
+    // Score each line for how "poignant"/quotable it is.
+    const score=(sent, idx)=>{
+      const len=sent.length, words=sent.split(/\s+/).length;
+      let sc=0;
+      if(len>=28 && len<=95) sc+=6; else if(len>=18 && len<=120) sc+=3;
+      if(len<16) sc-=5;                                   // fragment
+      if(len>150) sc-=6;                                  // too long to sit on a card
+      if(words>=5 && words<=18) sc+=3;
+      if(/\d/.test(sent)) sc+=3;                          // a number / stat
+      if(/[%$]/.test(sent)) sc+=3;                        // percent or dollar figure
+      if(/\b(not|isn'?t|don'?t|doesn'?t|won'?t|never|no|nothing)\b/i.test(sent)) sc+=3; // contrast/negation
+      if(/\b(but|because|which is why|so that|instead)\b/i.test(sent)) sc+=2;
+      if(/\b(you|your|we|we'?re|our|us)\b/i.test(sent)) sc+=2;   // direct address
+      if(/\b(most|only|every|always|best|worst|real|whole|entire|the reason)\b/i.test(sent)) sc+=2;
+      if(/^(i think|maybe|honestly|so |and |but )/i.test(sent)) sc-=2;  // weak opener
+      if(idx===0) sc+=1;                                  // gentle tie-break toward the hook
+      return sc;
+    };
+    let best=sentences[0], bestScore=-Infinity;
+    sentences.forEach((sent,i)=>{ const sc=score(sent,i); if(sc>bestScore){ bestScore=sc; best=sent; } });
+    let s=strip(best);
+    if(s.length>110) s=s.slice(0,107).trim()+"\u2026";
+    return s;
+  }
+  gfxDefault(post){
+    return { template:"statement", variant:(this.TPL_VAR.statement||"navy"), text:this.deriveText(post&&post.body), eyebrow:"CATALYSTOS INSIGHTS", image:this.LIB[0].src, size:"square", autoText:true };
+  }
+  openGfx(idx){
+    const p=this.state.posts[idx]; if(!p) return;
+    const draft = p.graphic ? {...this.gfxDefault(p), ...p.graphic} : this.gfxDefault(p);
+    this.setState({ gfx:{ postIdx:idx, draft, existing:!!p.graphic } });
+  }
+  editGraphic = ()=> this.openGfx(this.state.editIndex);
+  setDraft(patch){ this.setState(s=> s.gfx ? { gfx:{...s.gfx, draft:{...s.gfx.draft, ...patch}} } : {}); }
+  applyGfx = ()=> this.setState(s=>{
+    if(!s.gfx) return {};
+    const posts=s.posts.slice();
+    posts[s.gfx.postIdx]={...posts[s.gfx.postIdx], hasMedia:true, graphic:{...s.gfx.draft}};
+    return { posts, gfx:null };
+  });
+  removeGfx = ()=> this.setState(s=>{
+    if(!s.gfx) return {};
+    const posts=s.posts.slice();
+    posts[s.gfx.postIdx]={...posts[s.gfx.postIdx], graphic:null};
+    return { posts, gfx:null };
+  });
+  closeGfx = ()=> this.setState({ gfx:null });
+
+  // ---- brand templates browser ----
+  openBrand = ()=> this.setState({ brandOpen:true });
+  closeBrand2 = ()=> this.setState(s=> (s.gfx && s.gfx.fromCard) ? { brandOpen:false, gfx:null } : { brandOpen:false });
+  setMediaOff = (idx, off)=> this.setState(s=>{
+    const posts=s.posts.slice(); const p=posts[idx]; if(!p) return {};
+    posts[idx]={...p, mediaOff:off}; return { posts };
+  });
+  enableMedia = (idx)=> this.setState(s=>{
+    const posts=s.posts.slice(); const p=posts[idx]; if(!p) return {};
+    const np={...p, mediaOff:false, hasMedia:true};
+    if(!np.graphic) np.graphic={...this.gfxDefault(p)};
+    posts[idx]=np; return { posts };
+  });
+  openBrandFor = (idx)=> this.setState(s=>{
+    const p=s.posts[idx]; if(!p) return {};
+    const draft = p.graphic ? {...this.gfxDefault(p), ...p.graphic} : this.gfxDefault(p);
+    return { editIndex:idx, gfx:{ postIdx:idx, draft, existing:!!p.graphic, fromCard:true }, brandOpen:true };
+  });
+  _galleryTargetIdx(){
+    const s=this.state;
+    if(s.expandedIndex!=null && s.posts[s.expandedIndex]) return s.expandedIndex;
+    const mi = (s.selectedMonths && s.selectedMonths.length) ? s.selectedMonths[0] : this.CURRENT;
+    const list=this.monthPostIndices(mi);
+    if(list.length) return list[0];
+    return s.editIndex;
+  }
+  openGfxWithTemplate(tpl){
+    const idx=this._galleryTargetIdx();
+    const p=this.state.posts[idx]; if(!p) return;
+    const base = p.graphic ? {...this.gfxDefault(p), ...p.graphic} : this.gfxDefault(p);
+    const draft={...base, template:tpl, variant:(this.TPL_VAR[tpl]||(base&&base.variant)||"navy")};
+    this.setState({ editIndex:idx, gfx:{ postIdx:idx, draft, existing:!!p.graphic } });
+  }
+  brandPick = (e)=>{
+    const el=e.target.closest && e.target.closest("[data-tpl]");
+    if(!el) return;
+    const tpl=el.getAttribute("data-tpl");
+    this.setState(s=>{
+      if(!s.gfx){
+        const idx=this._galleryTargetIdx(); const p=s.posts[idx];
+        if(!p) return { brandOpen:false };
+        const base = p.graphic ? {...this.gfxDefault(p), ...p.graphic} : this.gfxDefault(p);
+        const draft={...base, template:tpl, variant:(this.TPL_VAR[tpl]||base.variant||"navy")};
+        const posts=s.posts.slice();
+        posts[idx]={...posts[idx], hasMedia:true, mediaOff:false, graphic:{...draft}};
+        return { posts, brandOpen:false, gfx:null, editIndex:idx };
+      }
+      const draft={...s.gfx.draft, template:tpl, variant:(this.TPL_VAR[tpl]||s.gfx.draft.variant||"navy")};
+      const posts=s.posts.slice();
+      posts[s.gfx.postIdx]={...posts[s.gfx.postIdx], hasMedia:true, mediaOff:false, graphic:{...draft}};
+      return { posts, brandOpen:false, gfx: {...s.gfx, draft, existing:true, fromCard:false} };
+    });
+  };
+  brandGridHtml(draft){
+    return this.GFX_TPL.map(([id,label])=>{
+      const on=draft&&draft.template===id;
+      return `<button data-tpl="${id}" style="display:flex;flex-direction:column;gap:8px;padding:8px;background:${on?'#F1ECFF':'#fff'};border:2px solid ${on?'#6818F8':'#e6e5e1'};border-radius:12px;cursor:pointer;text-align:left;">`+
+        `<div style="position:relative;width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:#0e2236;pointer-events:none;">${this.gfxTplThumb(id,draft)}</div>`+
+        `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;"><span style="font-size:12.5px;font-weight:700;color:#1d2226;">${label}</span>${on?'<span style="font-size:11px;font-weight:700;color:#6818F8;">Selected</span>':'<span style="font-size:11px;color:#9a9a95;">Use</span>'}</div>`+
+      `</button>`;
+    }).join("");
+  }
+
+  esc2(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  gGrad(v){
+    return v==="green" ? "radial-gradient(80% 80% at 86% 22%, #C1229C 0%, rgba(193,34,156,0) 44%), radial-gradient(85% 85% at 14% 84%, #6818F8 0%, rgba(104,24,248,0) 46%), radial-gradient(70% 60% at 60% 4%, #FDA71A 0%, rgba(253,167,26,0) 30%), linear-gradient(140deg,#0C0A38 0%,#08072A 100%)"
+      : v==="navy" ? "radial-gradient(90% 90% at 88% 12%, #7A2CF5 0%, rgba(122,44,245,0) 46%), radial-gradient(85% 85% at 10% 92%, #C1229C 0%, rgba(193,34,156,0) 44%), linear-gradient(135deg,#0B1150 0%,#070B30 100%)"
+      : v==="ink" ? "radial-gradient(95% 95% at 72% 8%, #2E1FB0 0%, rgba(46,31,176,0) 48%), linear-gradient(135deg,#0A0E30 0%,#05081C 100%)"
+      : "radial-gradient(88% 88% at 90% 18%, #FD6A2A 0%, rgba(253,106,42,0) 42%), radial-gradient(90% 90% at 8% 82%, #1E3AFF 0%, rgba(30,58,255,0) 46%), linear-gradient(135deg,#0A0E3A 0%,#08082C 100%)";
+  }
+  nodeSvg(){
+    return "<svg viewBox='0 0 100 100' preserveAspectRatio='xMidYMid meet' style='width:100%;height:100%;display:block'><defs><linearGradient id='cosn' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#1921FE'/><stop offset='.42' stop-color='#6818F8'/><stop offset='.72' stop-color='#C1229C'/><stop offset='1' stop-color='#FD7715'/></linearGradient></defs><g stroke='url(#cosn)' stroke-width='2.2' opacity='.75'><line x1='25' y1='59' x2='42' y2='42'/><line x1='42' y1='42' x2='62' y2='34'/><line x1='62' y1='34' x2='68' y2='61'/><line x1='68' y1='61' x2='83' y2='47'/><line x1='68' y1='61' x2='80' y2='76'/><line x1='45' y1='73' x2='68' y2='61'/><line x1='45' y1='73' x2='57' y2='85'/><line x1='80' y1='76' x2='57' y2='85'/><line x1='42' y1='42' x2='45' y2='73'/></g><g fill='url(#cosn)'><rect x='18' y='52' width='15' height='15' rx='2.6'/><rect x='36' y='36' width='12' height='12' rx='2.6'/><rect x='40' y='68' width='11' height='11' rx='2.6'/><rect x='56' y='28' width='13' height='13' rx='2.6'/><rect x='60' y='53' width='17' height='17' rx='2.6'/><rect x='78' y='42' width='10' height='10' rx='2.6'/><rect x='74' y='70' width='12' height='12' rx='2.6'/><rect x='52' y='80' width='10' height='10' rx='2.6'/></g></svg>";
+  }
+  texMeshHtml(op){
+    const pts=[[80,120],[300,70],[520,160],[760,90],[1000,150],[1150,300],[180,360],[430,320],[680,380],[930,340],[120,640],[360,600],[600,660],[860,620],[1100,640],[260,900],[520,940],[800,900],[1050,920],[160,1120],[440,1150],[720,1110],[980,1150]];
+    const lines=[[0,1],[1,2],[2,3],[3,4],[4,5],[0,6],[1,7],[2,8],[3,9],[6,7],[7,8],[8,9],[9,5],[6,10],[7,11],[8,12],[9,13],[10,11],[11,12],[12,13],[13,14],[10,15],[11,16],[12,17],[13,18],[15,16],[16,17],[17,18],[15,19],[16,20],[17,21],[18,22],[19,20],[20,21],[21,22]];
+    const ls=lines.map(k=>`<line x1='${pts[k[0]][0]}' y1='${pts[k[0]][1]}' x2='${pts[k[1]][0]}' y2='${pts[k[1]][1]}'/>`).join("");
+    const ns=pts.map(p=>`<circle cx='${p[0]}' cy='${p[1]}' r='3.4'/>`).join("");
+    return `<svg viewBox='0 0 1200 1200' preserveAspectRatio='none' style='position:absolute;inset:0;width:100%;height:100%;opacity:${Math.min((op||.18)*1.6,.5)};pointer-events:none;'><g stroke='#ffffff' stroke-width='1' opacity='.5'>${ls}</g><g fill='#ffffff'>${ns}</g></svg>`;
+  }
+  texContourHtml(op){
+    let p="";
+    for(let i=0;i<8;i++){ const y=40+i*150; p+=`<path d='M -60 ${y} C 250 ${y-95}, 520 ${y+120}, 820 ${y-30} S 1320 ${y+95}, 1320 ${y}' fill='none' stroke='#ffffff' stroke-width='1.3'/>`; }
+    return `<svg viewBox='0 0 1200 1200' preserveAspectRatio='none' style='position:absolute;inset:0;width:100%;height:100%;opacity:${Math.min((op||.1)*1.85,.5)};pointer-events:none;'>${p}</svg>`;
+  }
+  texDotsHtml(op){
+    const svg="<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><circle cx='4' cy='4' r='2' fill='white'/></svg>";
+    return `<div style="position:absolute;inset:0;background-image:url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}');background-size:3cqw 3cqw;opacity:${Math.min((op||.12)*1.85,.5)};pointer-events:none;"></div>`;
+  }
+  texHexHtml(op){
+    const svg="<svg xmlns='http://www.w3.org/2000/svg' width='60' height='68'><path d='M30 2 L56 17 L56 47 L30 62 L4 47 L4 17 Z' fill='none' stroke='white' stroke-width='1.3'/></svg>";
+    return `<div style="position:absolute;inset:0;background-image:url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}');background-size:5cqw 5.7cqw;opacity:${Math.min((op||.1)*1.85,.5)};pointer-events:none;"></div>`;
+  }
+  texFor(t){
+    const M={statement:["mesh",.14],megastatement:["hex",.09],headline:["contour",.13],spotlight:["contour",.12],bigcenter:["mesh",.13],twopart:["mesh",.12],arrowpoint:["mesh",.16],list:["dots",.12],arrowlist:["dots",.12],socialcard:["hex",.12],spokesperson:["mesh",.1]};
+    const e=M[t]||["mesh",.12];
+    return e[0]==="mesh"?this.texMeshHtml(e[1]):e[0]==="contour"?this.texContourHtml(e[1]):e[0]==="dots"?this.texDotsHtml(e[1]):this.texHexHtml(e[1]);
+  }
+  renderQ(text,acc){
+    return String(text||"").split(/(\*[^*]+\*)/g).map(seg=>{
+      if(/^\*[^*]+\*$/.test(seg)) return `<span style="color:${acc}">${this.esc2(seg.slice(1,-1))}</span>`;
+      return this.esc2(seg).replace(/\n/g,"<br>");
+    }).join("");
+  }
+  gfxHtml(cfg){
+    const c=cfg||{};
+    let h=this._gfxHtmlRaw(cfg);
+    if(c.textColor){ const tc=c.textColor;
+      h=h.split('color:#fff').join('color:'+tc)
+         .split('color:#0e2236').join('color:'+tc)
+         .split('color:#1d2226').join('color:'+tc); }
+    // Enlarge all graphic text for mobile readability: names/titles (small) get the biggest boost, big headlines the least.
+    h=h.replace(/font-size:([0-9.]+)cqw/g,(m,n)=>{ const v=parseFloat(n); const f=v<3?1.42:(v<6?1.2:1.07); return 'font-size:'+(Math.round(v*f*100)/100)+'cqw'; });
+    return h;
+  }
+  _gfxHtmlRaw(cfg){
+    const c=cfg||{};
+    const t=c.template||"statement";
+    if(t==="videoph"){ return `<div style="position:absolute;inset:0;overflow:hidden;container-type:size;background:#0B1338;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw;font-family:'Inter',sans-serif;">`+
+      `<svg viewBox="0 0 24 24" fill="none" stroke="#AEB4BB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:12cqw;height:12cqw;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="#AEB4BB" stroke="none"/></svg>`+
+      `<div style="font-weight:600;font-size:3cqw;letter-spacing:.05em;color:#9AA0A7;">Video placeholder</div>`+
+    `</div>`; }
+    const LIME="#C4A6FF", GOLD="#FDA71A";
+    const grad = c.bgColor ? c.bgColor : this.gGrad(c.variant||"teal");
+    const img=c.image||this.FOUNDER_IMGS[0];
+    const photo=this.state.photo||"assets/brad.jpg";
+    const title=this.esc2(this.state.bradTitle||this.BRAD_TITLE);
+    const who="Sarah Mitchell";
+    const DEF={statement:GOLD,megastatement:LIME,headline:LIME,spotlight:LIME,bigcenter:GOLD,twopart:GOLD,arrowpoint:GOLD,list:LIME,arrowlist:LIME,socialcard:"#1f7e79",photoquote:LIME,spokesperson:GOLD,image:LIME};
+    const ACC=DEF[t]||GOLD;
+    const Q=(x)=>this.renderQ(x,ACC);
+    const text=c.text||"";
+    const D="font-family:'Manrope',sans-serif;";
+    const tex=this.texFor(t);
+    const logoW=(pos)=>``;
+    const avatar=(sz)=>`<div style="width:${sz}cqw;height:${sz}cqw;border-radius:50%;overflow:hidden;border:0.34cqw solid #6818F8;box-shadow:0 0 0 0.12cqw rgba(255,255,255,.3);background:#0E1B4A;flex:none;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;object-position:center 18%"/></div>`;
+    const root=(inner)=>`<div style="position:absolute;inset:0;overflow:hidden;container-type:size;background:${grad};font-family:'Inter',sans-serif;">${tex}${inner}</div>`;
+
+    if(t==="image") return `<div style="position:absolute;inset:0;overflow:hidden;container-type:size;background:#081A53;"><img src="${img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/></div>`;
+
+    if(t==="photoquote") return `<div style="position:absolute;inset:0;overflow:hidden;container-type:size;background:#081A53;font-family:'Inter',sans-serif;">`+
+      `<img src="${img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42;"/>`+
+      `<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,22,40,.35) 0%,rgba(8,22,40,.05) 38%,rgba(8,22,40,.58) 100%);"></div>`+
+      `<div style="position:absolute;left:7cqw;right:10cqw;top:50%;transform:translateY(-50%);${D}font-weight:800;font-size:6.6cqw;line-height:1.05;letter-spacing:-.02em;color:#fff;text-shadow:0 0.2cqw 2cqw rgba(0,0,0,.45);">${Q(text)}</div>`+
+      `<div style="position:absolute;right:7cqw;bottom:6.2cqw;font-weight:600;font-size:2.2cqw;color:rgba(255,255,255,.92);">${this.esc2(who)}</div>`+
+      `</div>`;
+
+    if(t==="spokesperson") return root(
+      `<div style="position:absolute;right:0;top:0;bottom:0;width:40%;overflow:hidden;"><img src="${img}" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"/></div>`+
+      `<div style="position:absolute;right:40%;top:0;bottom:0;width:0.6cqw;background:${LIME};"></div>`+
+      `<div style="position:absolute;left:6.7cqw;top:0;bottom:9.8cqw;width:46%;display:flex;flex-direction:column;justify-content:center;">`+
+        `<div style="${D}font-weight:900;font-size:12.5cqw;line-height:.7;height:7.6cqw;color:${LIME};">\u201c</div>`+
+        `<div style="${D}font-weight:800;font-size:4.5cqw;line-height:1.08;letter-spacing:-.02em;color:#fff;">${Q(text)}</div>`+
+        `<div style="width:6.7cqw;height:0.33cqw;background:${LIME};margin-top:2.2cqw;"></div>`+
+        `<div style="${D}font-weight:800;font-size:2.4cqw;color:${GOLD};margin-top:1.8cqw;">${this.esc2(who)}</div>`+
+        `<div style="font-weight:500;font-size:1.75cqw;line-height:1.3;color:rgba(255,255,255,.9);margin-top:0.5cqw;width:88%;">${title}</div>`+
+      `</div>`);
+
+    if(t==="statement") return root(
+      `<div style="position:absolute;right:-7.5cqw;bottom:-8.3cqw;width:41cqw;height:41cqw;">${this.nodeSvg()}</div>`+
+      `<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:7cqw;padding-right:10cqw;">`+
+        `<div style="${D}font-weight:800;font-size:5.7cqw;line-height:1.08;letter-spacing:-.02em;color:#fff;">${Q(text)}</div>`+
+        `<div style="${D}font-weight:800;font-size:2.7cqw;color:${LIME};margin-top:3.3cqw;">${this.esc2(who)}</div>`+
+        `<div style="font-weight:500;font-size:1.85cqw;color:rgba(255,255,255,.92);margin-top:0.7cqw;max-width:53cqw;">${title}</div>`+
+      `</div>`+logoW("right:6.7cqw;bottom:5.8cqw;"));
+
+    if(t==="megastatement") return root(
+      `<div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 7.3cqw;"><div style="${D}font-weight:900;font-size:6.4cqw;line-height:1.05;letter-spacing:-.02em;color:#fff;">${Q(text)}</div></div>`+logoW("right:6.7cqw;bottom:5.8cqw;"));
+
+    if(t==="headline") return root(
+      `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8.3cqw;">`+
+        `<div style="${D}font-weight:900;font-size:7.3cqw;line-height:1.04;letter-spacing:-.01em;color:#fff;text-transform:uppercase;">${Q(text)}</div>`+
+        `<div style="margin-top:4.6cqw;">${avatar(12.3)}</div>`+
+        `<div style="${D}font-weight:800;font-size:2.5cqw;color:${GOLD};margin-top:1.8cqw;">${this.esc2(who)}</div>`+
+        `<div style="font-weight:500;font-size:1.75cqw;color:rgba(255,255,255,.92);margin-top:0.5cqw;">${title}</div>`+
+      `</div>`);
+
+    if(t==="spotlight") return root(
+      `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6.7cqw 8cqw;">`+
+        `<div style="${D}font-weight:900;font-size:7.6cqw;line-height:1.0;letter-spacing:-.01em;color:#fff;text-transform:uppercase;">${Q(text)}</div>`+
+        `<div style="margin-top:4.6cqw;">${avatar(14.3)}</div>`+
+        `<div style="${D}font-weight:800;font-size:2.7cqw;color:${GOLD};margin-top:2cqw;">${this.esc2(who)}</div>`+
+        `<div style="font-weight:500;font-size:1.75cqw;color:rgba(255,255,255,.92);margin-top:0.6cqw;">${title}</div>`+
+      `</div>`);
+
+    if(t==="bigcenter") return root(
+      `<div style="position:absolute;left:50%;bottom:-7.1cqw;transform:translateX(-50%);width:34cqw;height:34cqw;">${this.nodeSvg()}</div>`+
+      `<div style="position:absolute;left:0;right:0;top:0;bottom:15.2cqw;display:flex;flex-direction:column;justify-content:center;padding:0 7.5cqw;text-align:center;">`+
+        `<div style="${D}font-weight:800;font-size:7.8cqw;line-height:1.06;letter-spacing:-.02em;color:#fff;">${Q(text)}</div>`+
+        `<div style="${D}font-weight:800;font-size:2.5cqw;color:${GOLD};margin-top:3cqw;">${this.esc2(who)}</div>`+
+        `<div style="font-weight:500;font-size:1.67cqw;color:rgba(255,255,255,.9);margin-top:0.5cqw;">${title}</div>`+
+      `</div>`);
+
+    if(t==="twopart"){
+      const parts=String(text).split(/\n\s*\n|\s*\|\|\s*/).map(s=>s.trim()).filter(Boolean);
+      const lead=parts[0]||text, punch=parts.slice(1).join("  ");
+      return root(
+        `<div style="position:absolute;left:0;right:0;top:0;bottom:12.5cqw;display:flex;flex-direction:column;justify-content:center;padding-left:7cqw;padding-right:12.5cqw;">`+
+          `<div style="${D}font-weight:500;font-size:4.7cqw;line-height:1.22;letter-spacing:-.01em;color:#fff;">${Q(lead)}</div>`+
+          (punch?`<div style="width:14cqw;height:0.17cqw;background:rgba(255,255,255,.55);margin:3cqw 0;"></div>`:"")+
+          (punch?`<div style="${D}font-weight:700;font-size:4.7cqw;line-height:1.16;letter-spacing:-.01em;color:#fff;">${Q(punch)}</div>`:"")+
+        `</div>`+logoW("right:6.7cqw;bottom:5cqw;"));
+    }
+
+    if(t==="arrowpoint"){
+      const parts=String(text).split(/\n\s*\n|\s*\|\|\s*/).map(s=>s.trim()).filter(Boolean);
+      const lead=parts[0]||text, sub=parts[1]||"", kick=parts[2]||"";
+      return `<div style="position:absolute;inset:0;overflow:hidden;container-type:size;background:radial-gradient(90% 90% at 50% 0%, #6818F8 0%, rgba(104,24,248,0) 42%), radial-gradient(80% 80% at 85% 95%, #FD5920 0%, rgba(253,89,32,0) 40%), linear-gradient(160deg,#0B1150 0%,#06092A 100%);font-family:'Inter',sans-serif;">${tex}`+
+        `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6.3cqw 7.3cqw;">`+
+          `<div style="${D}font-weight:900;font-size:6.7cqw;line-height:1.02;letter-spacing:-.02em;color:#fff;">${Q(lead)}</div>`+
+          (sub?`<div style="${D}font-weight:400;font-size:4.5cqw;line-height:1;color:#fff;margin:1.6cqw 0;">\u2193</div>`:"")+
+          (sub?`<div style="${D}font-weight:700;font-size:3.7cqw;line-height:1.14;color:#fff;max-width:92%;">${Q(sub)}</div>`:"")+
+          (kick?`<div style="${D}font-weight:800;font-size:3.7cqw;line-height:1.12;color:${LIME};margin-top:2.3cqw;">${this.esc2(kick)}</div>`:"")+
+        `</div></div>`;
+    }
+
+    if(t==="list"||t==="arrowlist"){
+      const lines=String(text).split(/\n+/).map(s=>s.trim()).filter(Boolean);
+      const ttl=lines.length>1?lines[0]:"The Key Points";
+      const items=(lines.length>1?lines.slice(1):lines).slice(0,7);
+      const rows=items.map((it,i)=>{
+        const mark = t==="arrowlist" ? `<span style="${D}font-weight:700;font-size:4cqw;color:#B58CFF;min-width:3.5cqw;">\u2192</span>` : `<span style="${D}font-weight:500;font-size:4cqw;color:rgba(255,255,255,.7);min-width:4.5cqw;">${i+1}.</span>`;
+        return `<div style="display:flex;gap:1.8cqw;align-items:baseline;margin-bottom:1.3cqw;">${mark}<span style="${D}font-weight:800;font-size:4cqw;line-height:1.18;color:#fff;">${this.renderQ(it,LIME)}</span></div>`;
+      }).join("");
+      return root(
+        `<div style="position:absolute;left:0;right:0;top:0;bottom:14.7cqw;display:flex;flex-direction:column;justify-content:center;padding:0 8cqw;">`+
+          `<div style="text-align:center;${D}font-weight:800;font-size:5.3cqw;line-height:1.06;letter-spacing:-.01em;color:#fff;margin-bottom:3.6cqw;">${this.renderQ(ttl,GOLD)}</div>`+
+          `<div style="max-width:68cqw;width:100%;margin:0 auto;">${rows}</div>`+
+        `</div>`+
+        `<div style="position:absolute;left:0;right:0;bottom:6cqw;display:flex;align-items:center;justify-content:center;gap:1.5cqw;">${avatar(7.2)}<div><div style="${D}font-weight:800;font-size:2.1cqw;color:#fff;">${this.esc2(who)}</div><div style="font-weight:500;font-size:1.4cqw;color:rgba(255,255,255,.86);margin-top:0.25cqw;">${title}</div></div></div>`);
+    }
+
+    if(t==="socialcard") return root(
+      `<div style="position:absolute;left:8cqw;right:8cqw;top:50%;transform:translateY(-50%);background:#fff;border-radius:2.2cqw;padding:4.7cqw 5cqw;box-shadow:0 2.5cqw 6cqw rgba(8,30,50,.3);">`+
+        `<div style="display:flex;align-items:center;gap:1.5cqw;margin-bottom:2.8cqw;">`+
+          `<div style="width:6.3cqw;height:6.3cqw;border-radius:50%;overflow:hidden;border:0.25cqw solid #6818F8;flex:none;background:#0E1B4A;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;object-position:center 18%"/></div>`+
+          `<div style="flex:1;"><div style="display:flex;align-items:center;gap:0.8cqw;"><span style="${D}font-weight:800;font-size:2.8cqw;color:#6818F8;">${this.esc2(who)}</span><span style="width:2.3cqw;height:2.3cqw;border-radius:50%;background:#1921FE;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3cqw;">\u2713</span></div>`+
+          `<div style="font-weight:700;font-size:1.42cqw;letter-spacing:.14em;color:#0e2236;margin-top:0.3cqw;">CATALYSTOS</div></div>`+
+        `</div>`+
+        `<div style="${D}font-weight:600;font-size:3.2cqw;line-height:1.28;color:#081A53;">${this.renderQ(text,"#6818F8")}</div>`+
+      `</div>`);
+
+    return root(
+      `<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:7cqw;padding-right:10cqw;">`+
+        `<div style="${D}font-weight:800;font-size:5.7cqw;line-height:1.08;letter-spacing:-.02em;color:#fff;">${Q(text)}</div>`+
+        `<div style="${D}font-weight:800;font-size:2.7cqw;color:${LIME};margin-top:3.3cqw;">${this.esc2(who)}</div>`+
+      `</div>`+logoW("right:6.7cqw;bottom:5.8cqw;"));
+  }
+  gfxGalleryHtml(draft){
+    const sel=(draft&&draft.image)||"";
+    const thumb=(src)=>`<button data-src="${src}" style="position:relative;height:62px;border-radius:8px;cursor:pointer;overflow:hidden;border:2px solid ${sel===src?'#6818F8':'#e6e5e1'};padding:0;background:#eceae6;"><img src="${src}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;"/></button>`;
+    const grid=(arr)=>`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">${arr.map(thumb).join("")}</div>`;
+    const head=(t)=>`<div style="font-size:11px;font-weight:700;letter-spacing:0.07em;color:#a0a09b;text-transform:uppercase;margin:4px 0 9px;">${t}</div>`;
+    return head("Founders")+grid(this.FOUNDER_IMGS)+head("Company")+grid(this.COMPANY_IMGS);
+  }
+  pickImageDelegate = (e)=>{
+    const el=e.target.closest && e.target.closest("[data-src]");
+    if(el) this.setDraft({ image: el.getAttribute("data-src") });
+  };
+  chipCss(on){ return `padding:9px 8px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid ${on?'#6818F8':'#e0dfdb'};background:${on?'#6818F8':'#fff'};color:${on?'#fff':'#3b3b38'};`; }
+  varCss(hex,on){ return `width:34px;height:34px;border-radius:8px;cursor:pointer;background:${hex};border:2px solid ${on?'#6818F8':'transparent'};box-shadow:0 0 0 1px rgba(0,0,0,.1);padding:0;`; }
+  segCss(on){ return `flex:1;padding:9px 6px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid ${on?'#6818F8':'#e0dfdb'};background:${on?'#F1ECFF':'#fff'};color:${on?'#6818F8':'#3b3b38'};`; }
+  gfxTplThumb(id, d){
+    const cfg={ template:id, variant:(this.TPL_VAR[id]||"teal"), image:(d&&d.image)||this.FOUNDER_IMGS[0],
+      text: (id==="list"||id==="arrowlist") ? "The Key Points\nAccess first\nBack conviction\nOpen the doors"
+          : (id==="twopart"||id==="arrowpoint") ? "The old model is closed.\n\nWe're opening it."
+          : "Access is the whole thesis." };
+    return this.gfxHtml(cfg);
+  }
+  gfxTplHtml(d){
+    const key=((d&&d.variant)||"")+"|"+((d&&d.image)||"")+"|"+((d&&d.template)||"");
+    if(this._tplKey===key && this._tplHtml) return this._tplHtml;
+    const html=this.GFX_TPL.map(([id,label])=>{
+      const on=d&&d.template===id;
+      return `<button data-tpl="${id}" style="display:flex;flex-direction:column;gap:5px;padding:4px;background:${on?'#F1ECFF':'#fff'};border:1.5px solid ${on?'#6818F8':'#e6e5e1'};border-radius:9px;cursor:pointer;">`+
+        `<div style="position:relative;width:100%;aspect-ratio:1/1;border-radius:5px;overflow:hidden;background:#0e2236;pointer-events:none;">${this.gfxTplThumb(id,d)}</div>`+
+        `<span style="font-size:10px;font-weight:600;color:${on?'#6818F8':'#5e5e5a'};text-align:center;line-height:1.1;">${label}</span>`+
+      `</button>`;
+    }).join("");
+    this._tplKey=key; this._tplHtml=html;
+    return html;
+  }
+  gfxVarHtml(d){ return this.GFX_VAR.map(([id,label,hex])=>`<button data-var="${id}" title="${label}" style="${this.varCss(hex, d&&d.variant===id)}"></button>`).join(""); }
+  gfxSizeHtml(d){ return this.GFX_SIZE.map(([id,label])=>`<button data-size="${id}" style="${this.segCss(d&&d.size===id)}">${label}</button>`).join(""); }
+  onTplClick = (e)=>{ const el=e.target.closest && e.target.closest("[data-tpl]"); if(el){ const tpl=el.getAttribute("data-tpl"); this.setDraft({template:tpl, variant:(this.TPL_VAR[tpl]||"navy")}); } };
+  onVarClick = (e)=>{ const el=e.target.closest && e.target.closest("[data-var]"); if(el) this.setDraft({variant:el.getAttribute("data-var")}); };
+  autoSwatch(kind,on){
+    return `<button data-${kind}="__auto" title="Template default" style="width:34px;height:34px;border-radius:8px;cursor:pointer;background:#fff;border:2px solid ${on?'#6818F8':'#e0dfdb'};box-shadow:0 0 0 1px rgba(0,0,0,.08);padding:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7a7a76;">Auto</button>`;
+  }
+  gfxTxtHtml(d){ const cur=d&&d.textColor; return this.autoSwatch("txt",!cur)+this.GFX_TXT.map(([label,hex])=>`<button data-txt="${hex}" title="${label}" style="${this.varCss(hex, cur===hex)}"></button>`).join(""); }
+  gfxBgHtml(d){ const cur=d&&d.bgColor; return this.autoSwatch("bg",!cur)+this.GFX_BG.map(([label,hex])=>`<button data-bg="${hex}" title="${label}" style="${this.varCss(hex, cur===hex)}"></button>`).join(""); }
+  onTxtClick = (e)=>{ const el=e.target.closest && e.target.closest("[data-txt]"); const d=this.state.gfx&&this.state.gfx.draft; if(el && d && d.template){ const v=el.getAttribute("data-txt"); this.setDraft({textColor: v==="__auto"?null:v}); } };
+  onBgClick = (e)=>{ const el=e.target.closest && e.target.closest("[data-bg]"); const d=this.state.gfx&&this.state.gfx.draft; if(el && d && d.template){ const v=el.getAttribute("data-bg"); this.setDraft({bgColor: v==="__auto"?null:v}); } };
+  onSizeClick = (e)=>{ const el=e.target.closest && e.target.closest("[data-size]"); if(el) this.setDraft({size:el.getAttribute("data-size")}); };
+
+  toggleDl = ()=> this.setState(s=>({ dlOpen:!s.dlOpen }));
+  closeDl = ()=> this.setState({ dlOpen:false });
+  saveNow = ()=>{ this._persist(); this._cloudSave(true); this.setState({ savedFlash:true }); clearTimeout(this._svT); this._svT=setTimeout(()=>this.setState({ savedFlash:false }), 1700); };
+  poignantLines(body){
+    let s=String(body||"").replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}]/gu,"").replace(/\r/g,"");
+    let parts=s.split(/(?<=[.!?])\s+|\n+/).map(x=>x.replace(/\*/g,"").replace(/\s+/g," ").trim()).filter(Boolean);
+    parts=parts.filter(t=>{ const w=t.split(/\s+/).length; if(/\?\s*$/.test(t)) return false; return w>=3 && w<=16; });
+    const seen={}; parts=parts.filter(t=>{ const k=t.toLowerCase(); if(seen[k]) return false; seen[k]=1; return true; });
+    return parts.length ? parts : [this.deriveText(body)];
+  }
+  // ---- PNG graphics export ----
+  sizePx(size){ return size==="banner" ? [1200,627] : size==="tall" ? [1200,1600] : [1200,1200]; }
+  graphicIdxs(){ const sel=this.state.selectedMonths||[]; return this.state.posts.map((p,i)=>({p,i})).filter(o=>sel.indexOf(o.p.monthIndex)>=0 && o.p.graphic).map(o=>o.i); }
+  pickPNG = ()=>{ const n=this.graphicIdxs().length; this.setState({ dlOpen:false, pngOpen:true, pngBusy:false, pngCount: n||1 }); };
+  closePng = ()=>{ if(this.state.pngBusy) return; this.setState({ pngOpen:false }); };
+  setPngCount = (e)=> this.setState({ pngCount: Math.max(1, parseInt(e.target.value,10)||1) });
+  runPngExport = async ()=>{
+    if(this.state.pngBusy) return;
+    const all=this.graphicIdxs();
+    const n=Math.max(1, Math.min(this.state.pngCount||all.length, all.length));
+    const sel=all.slice(0,n);
+    if(!sel.length){ this.setState({pngOpen:false}); return; }
+    if(!window.htmlToImage){ this.setState({pngStatus:"Still loading exporter — try again in a moment."}); return; }
+    this.setState({ pngBusy:true, pngStatus:"Preparing…" });
+    const zip = window.JSZip ? new window.JSZip() : null;
+    for(let k=0;k<sel.length;k++){
+      const idx=sel[k], p=this.state.posts[idx], g=p.graphic;
+      this.setState({ pngStatus:"Rendering "+(k+1)+" of "+sel.length+"…" });
+      const [w,h]=this.sizePx(g.size);
+      const holder=document.createElement("div");
+      holder.style.cssText="position:fixed;left:-99999px;top:0;width:"+w+"px;height:"+h+"px;overflow:hidden;";
+      holder.innerHTML=this.gfxHtml(this.gfxEff(p)||g);
+      const root=holder.firstElementChild;
+      if(root){ root.style.position="relative"; root.style.inset="auto"; root.style.width=w+"px"; root.style.height=h+"px"; }
+      document.body.appendChild(holder);
+      await new Promise(r=>setTimeout(r,120));
+      let dataUrl=null;
+      try{ dataUrl=await window.htmlToImage.toPng(root||holder,{width:w,height:h,pixelRatio:1,cacheBust:true}); }catch(e){ console.warn("png fail",e); }
+      holder.remove();
+      if(dataUrl){ const name=this.fileName(p.monthIndex,this.numOf(idx)); if(zip){ zip.file(name, dataUrl.split(",")[1], {base64:true}); } else { const a=document.createElement("a"); a.href=dataUrl; a.download=name; a.click(); await new Promise(r=>setTimeout(r,300)); } }
+    }
+    if(zip){ this.setState({pngStatus:"Zipping…"}); const blob=await zip.generateAsync({type:"blob"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="CatalystOS_Graphics_"+this.MSHORT[(this.state.selectedMonths&&this.state.selectedMonths.length===1)?this.state.selectedMonths[0]:0]+"_"+this.YEAR+".zip"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),3000); }
+    this.setState({ pngBusy:false, pngOpen:false });
+  };
+  pickPDF = ()=>{ this.setState({ dlOpen:false }); this.exportPDF(); };
+  pickWord = ()=>{ this.setState({ dlOpen:false }); this.exportWord(); };
+
+  // ---- founder (top nav) ----
+  toggleSarah = ()=> this.setState(s=>({ bradOpen:!s.bradOpen }));
+  closeSarah = ()=> this.setState({ bradOpen:false });
+  setSarahTitle = (e)=> this.setState({ bradTitle: e.target.value });
+
+  // ---- "Powered by" team selector ----
+  TEAMS = ["CatalystOS Ventures", "Havener Capital Group", "VCAFX Fund", "Advisorpedia"];
+  toggleTeam = ()=> this.setState(s=>({ teamOpen:!s.teamOpen, bradOpen:false }));
+  closeTeam = ()=> this.setState({ teamOpen:false });
+  pickTeam = (name)=> this.setState({ team:name, teamOpen:false });
+
+  // ---- content tools ----
+  cleanLinkedIn(t){
+    if(!t) return "";
+    let s=String(t);
+    s=s.replace(/\r\n?/g,"\n");
+    s=s.replace(/\u00a0/g," ");
+    s=s.replace(/[\u200B-\u200D\uFEFF\u2028\u2029]/g,"");
+    s=s.replace(/^[ \t]*[•·▪‣◦*-]\s+/gm,"• ");
+    s=s.replace(/[ \t]+\n/g,"\n");
+    s=s.replace(/[ \t]{2,}/g," ");
+    s=s.replace(/\n{3,}/g,"\n\n");
+    return s.replace(/^\n+|\n+$/g,"").trim();
+  }
+  onBodyPaste = (e)=>{
+    const cd=e.clipboardData; if(!cd) return;
+    const txt=cd.getData("text/plain"); if(txt==null) return;
+    e.preventDefault();
+    const cleaned=this.cleanLinkedIn(txt);
+    const ta=e.target;
+    const start=ta.selectionStart==null?(ta.value||"").length:ta.selectionStart;
+    const end=ta.selectionEnd==null?start:ta.selectionEnd;
+    const cur=this.state.posts[this.state.expandedIndex]; if(!cur) return;
+    const curBody=cur.body||"";
+    this.updateCur("body", curBody.slice(0,start)+cleaned+curBody.slice(end));
+  };
+  cleanText = ()=>{ const c=this.state.posts[this.state.expandedIndex]; if(c) this.updateCur("body", this.cleanLinkedIn(c.body)); };
+  pasteClean = async ()=>{
+    const i=this.state.expandedIndex; if(i==null) return;
+    try{
+      const t=await navigator.clipboard.readText();
+      if(t!=null){ const cur=(this.state.posts[i]||{}).body||""; this.updateCur("body", this.cleanLinkedIn(cur?(cur.replace(/\s+$/,"")+"\n\n"+t):t)); }
+    }catch(e){ /* clipboard blocked — use Cmd/Ctrl+V in the field, paste is auto-cleaned */ }
+  };
+  FALLBACK_GEN = [
+    "Access is the whole thesis.\n\nWhen more people can invest early, more people share in what gets built. That's the firm we set out to build — and the one we're still building today. 📈",
+    "Venture capital shouldn't require an invitation.\n\nIt should require a thesis you believe in. At CatalystOS, we're opening doors that were closed for far too long.",
+    "The best founders aren't always where the money already is.\n\nThey're in the cities everyone overlooks. Our job is to find them — and to bring more investors along for the ride.",
+  ];
+  generateText = async ()=>{
+    if(this.state.genBusy) return;
+    const token = ++this._genToken;
+    this.setState({genBusy:true});
+    const c0=this.state.posts[this.state.expandedIndex]; const seed=((c0&&c0.body)||"").slice(0,240);
+    const apply = (txt)=>{ if(this._genToken===token){ this.updateCur("body", this.cleanLinkedIn(txt)); this.setState({genBusy:false}); } };
+    try{
+      if(window.claude && window.claude.complete){
+        const prompt='Write ONE LinkedIn post (max 110 words) in the voice of Sarah Mitchell, Co-Founder & CTO at CatalystOS, the AI operating system built for modern marketing agencies. Short, punchy lines. At most 1-2 tasteful emojis. No surrounding quotation marks. '+(seed? ('Build on this seed: "'+seed+'". ') : '')+'Return only the post text.';
+        const res=await window.claude.complete(prompt);
+        if(this._genToken!==token) return; // cancelled — discard
+        if(res) apply(res); else this.setState({genBusy:false});
+      } else {
+        apply(this.FALLBACK_GEN[Math.floor(Math.random()*this.FALLBACK_GEN.length)]);
+      }
+    }catch(e){
+      if(this._genToken===token) apply(this.FALLBACK_GEN[Math.floor(Math.random()*this.FALLBACK_GEN.length)]);
+    }
+  };
+  _genToken = 0;
+  cancelGen = ()=>{ this._genToken++; this.setState({genBusy:false}); };
+  expandPost = (idx)=>{ const p=this.state.posts[idx]; this._editSnap={ idx, body:(p&&p.body)||"" }; this.setState({ expandedIndex:idx, linkOpen:false, textSaved:false }); };
+  saveText = ()=>{ const i=this.state.expandedIndex; if(i==null) return; const b=(this.state.posts[i]&&this.state.posts[i].body)||""; this._editSnap={ idx:i, body:b }; this.setState({ expandedIndex:null }); };
+  cancelWriting = ()=>{
+    if(this.state.genBusy){ this.cancelGen(); return; }
+    const snap=this._editSnap;
+    this.setState(s=>{
+      let posts=s.posts;
+      if(snap && s.posts[snap.idx]){ posts=s.posts.slice(); posts[snap.idx]={...posts[snap.idx], body:snap.body}; }
+      return { posts, expandedIndex:null, linkOpen:false };
+    });
+  };
+
+  // ---- link a Claude project ----
+  toggleLink = ()=> this.setState(s=>({ linkOpen:!s.linkOpen, linkDraft: ((s.posts[s.expandedIndex]&&s.posts[s.expandedIndex].linkedProject)||this.BUILDER_URL) }));
+  setLinkDraft = (e)=> this.setState({ linkDraft: e.target.value });
+  saveLink = ()=>{ const u=(this.state.linkDraft||"").trim(); this.updateCur("linkedProject", u||null); this.setState({linkOpen:false}); };
+  unlink = ()=> this.updateCur("linkedProject", null);
+  openLinked = ()=>{ const c=this.state.posts[this.state.expandedIndex]; const u=c&&c.linkedProject; if(u){ try{ window.open(u,"_blank","noopener"); }catch(e){} } };
+
+  gfxEff(post){
+    const g=post && post.graphic; if(!g) return null;
+    return (g.autoText!==false) ? Object.assign({}, g, { text:this.deriveText(post.body) }) : g;
+  }
+  addPost(mi){
+    this.setState(p=>({ posts:[...p.posts, this.blankPost(mi)] }));
+  }
+  setMonthCount(mi, target){
+    target = Math.max(0, Math.min(24, target));
+    this.setState(p=>{
+      const inMonth = p.posts.filter(x=>x.monthIndex===mi);
+      let posts = p.posts.slice();
+      if(target > inMonth.length){
+        for(let k=inMonth.length; k<target; k++) posts.push(this.blankPost(mi));
+      } else if(target < inMonth.length){
+        let remove = inMonth.length - target;
+        for(let i=posts.length-1; i>=0 && remove>0; i--){ if(posts[i].monthIndex===mi){ posts.splice(i,1); remove--; } }
+      }
+      return { posts };
+    });
+  }
+  deletePost(absIdx){
+    this.setState(p=>{ const posts=p.posts.slice(); posts.splice(absIdx,1); return {posts}; });
+  }
+
+  step(dir){
+    const cur=this.state.posts[this.state.editIndex];
+    const list=this.monthPostIndices(cur.monthIndex);
+    let pos=list.indexOf(this.state.editIndex);
+    pos=(pos+dir+list.length)%list.length;
+    this.setState({editIndex:list[pos]});
+  }
+  openBuilder = ()=>{ try{ window.open(this.BUILDER_URL, "_blank", "noopener"); }catch(e){} };
+
+  /* ---------- exports ---------- */
+  esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  fmtRich(s){ return this.esc(s).replace(/\*([^*]+)\*/g,"<b>$1</b>").replace(/\n/g,"<br>"); }
+  groups(onlySelected){
+    const sel = onlySelected ? (this.state.selectedMonths||[]) : null;
+    const map={};
+    this.state.posts.forEach((p,i)=>{ if(sel && sel.indexOf(p.monthIndex)<0) return; (map[p.monthIndex]=map[p.monthIndex]||[]).push({p,i}); });
+    return Object.keys(map).map(k=>+k).sort((a,b)=>a-b).map(mi=>({
+      mi, title:this.MONTHS[mi]+" "+this.YEAR,
+      items: map[mi].map((o,j)=>({ post:o.p, idx:o.i, num:j+1 })),
+    }));
+  }
+  printDoc(html){
+    const f=document.createElement("iframe");
+    f.style.cssText="position:fixed;right:0;bottom:0;width:0;height:0;border:0;";
+    document.body.appendChild(f);
+    const d=f.contentWindow.document; d.open(); d.write(html); d.close();
+    setTimeout(()=>{ try{ f.contentWindow.focus(); f.contentWindow.print(); }catch(e){} setTimeout(()=>f.remove(), 1200); }, 850);
+  }
+  dlBlob(name, blob){
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1500);
+  }
+
+  exportPDF = ()=>{
+    const groups=this.groups(true);
+    let body="";
+    groups.forEach(g=>{
+      g.items.forEach(it=>{
+        const p=it.post;
+        const gEff=this.gfxEff(p);
+        let media="";
+        if(gEff){
+          const W=460, ar=this.aspectOf(gEff.size), parts=ar.split("/").map(Number);
+          const H=Math.round(W*parts[1]/parts[0]);
+          media=`<div class="media" style="position:relative;width:${W}px;height:${H}px;">${this.gfxHtml(gEff)}</div>`;
+        } else if(p.image){
+          media=`<div class="media"><img src="${this.esc(p.image)}"/></div>`;
+        } else if(p.hasMedia){
+          media=`<div class="media"><div class="ph">${this.esc(this.fileName(p.monthIndex,it.num))}</div></div>`;
+        }
+        const footerCta = (typeof p.footer==="number" && this.FOOTERS[p.footer]) ? `<div class="cta">${this.esc(this.FOOTERS[p.footer])}</div>` : "";
+        body += `<div class="page">
+          <div class="post">
+            <div class="eyebrow">${this.esc(g.title)} · Post #${it.num}</div>
+            <div class="hd"><img class="av" src="${this.esc(this.state.photo)}"/><div><div class="nm">${this.esc(this.BRAD_NAME)}</div><div class="tl">${this.esc(this.BRAD_TITLE)}</div><div class="mt">${this.esc(p.time)} · 🌐</div></div></div>
+            <div class="bd">${this.fmtRich(p.body)}</div>
+            ${footerCta}
+            ${media}
+            <div class="eng">
+              <div class="rx"><span class="bub b1">👍</span><span class="bub b2">❤️</span><span class="bub b3">💡</span><span class="cnt">${this.fmt(p.likes)}</span></div>
+              <div class="cnt">${this.fmt(p.comments)} comments · ${this.fmt(p.reposts)} reposts</div>
+            </div>
+          </div>
+        </div>`;
+      });
+    });
+    const html=`<!doctype html><html><head><meta charset="utf-8"><title>CatalystOS — Sarah Mitchell posts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@700;800;900&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+      *{box-sizing:border-box;font-family:'Inter',-apple-system,Segoe UI,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+      body{margin:0;padding:0;color:#1d2226;background:#fff;}
+      .page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;page-break-after:always;break-after:page;}
+      .page:last-child{page-break-after:auto;break-after:auto;}
+      .post{width:460px;max-width:100%;border:1px solid #e0dfdb;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+      .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b0b0ab;padding:14px 16px 0;}
+      .hd{display:flex;gap:10px;padding:8px 16px 0;} .av{width:48px;height:48px;border-radius:50%;object-fit:cover;}
+      .nm{font-weight:700;font-size:15px;} .tl{font-size:12px;color:#5e5e5a;} .mt{font-size:11.5px;color:#9a9a95;margin-top:1px;}
+      .bd{padding:12px 16px;font-size:14px;line-height:1.5;white-space:pre-wrap;}
+      .cta{padding:0 16px 12px;font-size:13.5px;line-height:1.5;color:#1d2226;white-space:pre-wrap;}
+      .media{width:100%;margin-top:6px;} .media img{width:100%;display:block;}
+      .ph{background:linear-gradient(135deg,#081A53,#6818F8);color:#fff;font-family:monospace;font-size:12px;padding:60px 16px;text-align:center;word-break:break-all;}
+      .eng{display:flex;align-items:center;justify-content:space-between;padding:11px 16px 13px;border-top:1px solid #f0efec;margin-top:6px;}
+      .rx{display:flex;align-items:center;gap:5px;}
+      .bub{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:1.5px solid #fff;}
+      .b1{background:#0A66C2;} .b2{background:#df704d;margin-left:-5px;} .b3{background:#f5bb5c;margin-left:-5px;}
+      .cnt{font-size:12px;color:#8a8a86;}
+      @page{margin:0;}
+    </style></head><body>
+      ${body}
+    </body></html>`;
+    this.printDoc(html);
+  };
+
+  exportWord = ()=>{
+    const groups=this.groups(true);
+    let body="";
+    groups.forEach(g=>{
+      body += `<h2 style="color:#1e4a85;">${this.esc(g.title)}</h2>`;
+      g.items.forEach(it=>{
+        const p=it.post;
+        body += `<p style="margin:0 0 2px;color:#888;font-size:11px;">Post #${it.num}${p.hasMedia?` · graphic: ${this.esc(this.fileName(p.monthIndex,it.num))}`:""}</p>`;
+        body += `<p style="margin:0 0 16px;font-size:13px;line-height:1.5;">${this.fmtRich(p.body)}</p>`;
+      });
+    });
+    const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head>
+    <body style="font-family:Calibri,Arial,sans-serif;color:#222;">
+      <h1>CatalystOS — Sarah Mitchell · Founder-Led Posts</h1>
+      <p style="color:#666;">${this.esc(this.BRAD_TITLE)}</p>
+      ${body}
+    </body></html>`;
+    const blob=new Blob(["\ufeff"+html], {type:"application/msword"});
+    this.dlBlob("CatalystOS_Sarah_Posts_"+this.YEAR+".doc", blob);
+  };
+
+  buildPayload(){
+    const groups=this.groups();
+    const posts=[];
+    groups.forEach(g=> g.items.forEach(it=>{
+      const p=it.post;
+      posts.push({
+        author:this.BRAD_NAME, title:this.BRAD_TITLE,
+        month:this.MONTHS[p.monthIndex], year:this.YEAR, number:it.num,
+        body:p.body,
+        graphic: p.hasMedia ? this.fileName(p.monthIndex, it.num) : null,
+        channel:"linkedin", status:"draft",
+      });
+    }));
+    return { account:"CatalystOS Social", exportedAt:new Date().toISOString(), count:posts.length, posts };
+  }
+  sendModal(kind){
+    const count=this.state.posts.length;
+    this.setState({ modal:{ kind, stage:"sending", count } });
+    setTimeout(()=> this.setState(p=> p.modal? { modal:{...p.modal, stage:"done"} } : {}), 1500);
+  }
+  sendHubspot = ()=> this.sendModal("hubspot");
+  sendReview = ()=> this.sendModal("review");
+  downloadPayload = ()=>{
+    const blob=new Blob([JSON.stringify(this.buildPayload(),null,2)], {type:"application/json"});
+    this.dlBlob("CatalystOS_HubSpot_"+this.YEAR+".json", blob);
+  };
+  closeModal = ()=> this.setState({ modal:null });
+  stop = (e)=>{ e.stopPropagation(); };
+
+  renderVals(){
+    const s=this.state;
+    const ACCENT = this.props.accentColor || "#6818F8";
+    const TARGET = this.props.monthlyTarget || 12;
+    const SHOW_ENGAGEMENT = this.props.showEngagement !== false;
+    const counts={}; s.posts.forEach(p=>{ counts[p.monthIndex]=(counts[p.monthIndex]||0)+1; });
+
+    const monthChips=this.MONTHS.map((full,idx)=>{
+      const sel=s.selectedMonths.includes(idx); const n=counts[idx]||0;
+      return {
+        label:this.MSHORT[idx], full, count:n, hasPosts:n>0,
+        onToggle:()=> this.setState({selectedMonths:[idx]}),
+        style:`display:flex; align-items:center; gap:7px; padding:8px 14px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; transition:.12s; border:1px solid ${sel?'#C9B6FF':'#e0dfdb'}; background:${sel?'#F1ECFF':'#fff'}; color:${sel?'#5211CC':'#3b3b38'};`,
+        badgeStyle:`min-width:18px; height:18px; padding:0 5px; border-radius:999px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; background:${sel?'rgba(74,67,50,0.14)':'#f3ecda'}; color:${sel?'#6b6045':ACCENT};`,
+      };
+    });
+
+    const sections=[...s.selectedMonths].sort((a,b)=>a-b).map(mi=>{
+      const inMonth=s.posts.map((p,i)=>({p,i})).filter(o=>o.p.monthIndex===mi);
+      const cards=inMonth.map((o,j)=>{
+        const p=o.p, idx=o.i, num=j+1;
+        const g=p.graphic;
+        const gEff=this.gfxEff(p);
+        const isExp = s.expandedIndex===idx;
+        return {
+          num,
+          onExpand:()=> this.expandPost(idx),
+          onCollapse:()=> this.setState({ expandedIndex:null }),
+          expanded:isExp, collapsed:!isExp,
+          cardBorder: isExp ? ACCENT : "#e0dfdb",
+          bodyDisplay: p.body || "Tap to write Sarah's post…",
+          bodyColor: p.body ? "#1d2226" : "#a0a09b",
+          hasFooter: typeof p.footer==="number" && !!this.FOOTERS[p.footer],
+          footerText: (typeof p.footer==="number" && this.FOOTERS[p.footer]) || "",
+          onDelete:(e)=>{ e.stopPropagation(); this.deletePost(idx); },
+          onGraphic:(e)=>{ e.stopPropagation(); this.openGfx(idx); },
+          onCustomize:(e)=>{ e.stopPropagation(); this.openGfx(idx); },
+          onGraphicOn:(e)=>{ e.stopPropagation(); this.enableMedia(idx); },
+          onGraphicOff:(e)=>{ e.stopPropagation(); this.setMediaOff(idx, true); },
+          onAddGraphic:(e)=>{ e.stopPropagation(); this.enableMedia(idx); },
+          segGraphicStyle:"padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;background:#fff;color:#0e2236;cursor:pointer;",
+          segNoneStyle:"padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;background:transparent;color:#fff;cursor:pointer;",
+          mediaVisible: !!(p.hasMedia && !p.mediaOff),
+          showAddBar: !(p.hasMedia && !p.mediaOff),
+          verified:p.verified, hasMedia:p.hasMedia,
+          degreeLabel:this.degLabel(p.degree), time:p.time, body:p.body||"",
+          hasGraphic:!!g, noGraphic:!g,
+          gTemplate:g&&g.template, gVariant:g&&g.variant, gText:g&&g.text, gEyebrow:g&&g.eyebrow, gImage:g&&g.image,
+          gAspect: g? this.aspectOf(g.size) : "1/1",
+          graphicHtml: gEff? {__html:this.gfxHtml(gEff)} : {__html:""},
+          imgBg:`url("${this.imgPath(p,num)}")`, imgFilename:this.fileName(p.monthIndex,num),
+          likesFmt:this.fmt(p.likes),
+          footerCounts:`${this.fmt(p.comments)} comments · ${this.fmt(p.reposts)} reposts`,
+          showEngagement:SHOW_ENGAGEMENT,
+        };
+      });
+      return {
+        title:this.MONTHS[mi]+" "+this.YEAR,
+        count:inMonth.length, empty:inMonth.length===0,
+        countLabel: inMonth.length===1? "1 post" : inMonth.length+" posts",
+        targetLabel:"target "+TARGET,
+        cards,
+        onInc:()=> this.setMonthCount(mi, inMonth.length+1),
+        onDec:()=> this.setMonthCount(mi, inMonth.length-1),
+        onAdd:()=> this.addPost(mi),
+      };
+    });
+
+    const actions=[
+      {label:"Like", icon:{__html:this.icon("like")}},
+      {label:"Comment", icon:{__html:this.icon("comment")}},
+      {label:"Repost", icon:{__html:this.icon("repost")}},
+      {label:"Send", icon:{__html:this.icon("send")}},
+    ];
+    const swatches=this.SWATCHES.map(hex=>({
+      onClick:()=> this.setState({photoColor:hex}),
+      style:`width:30px; height:30px; border-radius:50%; cursor:pointer; transition:.12s; background:${hex}; border:2px solid ${s.photoColor===hex?'#6818F8':'transparent'}; box-shadow:0 0 0 1px rgba(0,0,0,.08);`,
+    }));
+
+    const exIdx=s.expandedIndex;
+    const cur=(exIdx!=null && s.posts[exIdx]) ? s.posts[exIdx] : (s.posts[0] || this.blankPost(this.CURRENT));
+    const curFooter = (cur && typeof cur.footer==="number") ? cur.footer : null;
+    const footerOpts = [{ label:"None", preview:"", idx:null }].concat(this.FOOTERS.map((_,i)=>({ label:this.FOOTER_LABELS[i], preview:" · "+this.footerPreview(i), idx:i }))).map(o=>{
+      const on = curFooter===o.idx;
+      return {
+        label:o.label, preview:o.preview,
+        onClick:()=> this.updateCur("footer", o.idx),
+        style:`display:flex; align-items:center; gap:0; text-align:left; padding:9px 11px; border-radius:8px; cursor:pointer; font-size:11.5px; line-height:1.3; border:1px solid ${on?'#6818F8':'#e0dfdb'}; background:${on?'#F1ECFF':'#fff'}; color:#3b3b38;`,
+      };
+    });
+    const rowStyle="width:100%; display:flex; align-items:center; justify-content:space-between; background:#faf9f7; border:1px solid #ececea; border-radius:9px; padding:11px 13px; cursor:pointer; margin-top:4px;";
+    const m=s.modal;
+    const cg=cur.graphic;
+    const cgEff=this.gfxEff(cur);
+
+    // graphic editor modal
+    const gx=s.gfx;
+    const draft=gx?gx.draft:null;
+    const chipStyle=(on)=>`padding:9px 8px; border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer; transition:.12s; border:1px solid ${on?'#6818F8':'#e0dfdb'}; background:${on?'#6818F8':'#fff'}; color:${on?'#fff':'#3b3b38'};`;
+    const varStyle=(hex,on)=>`width:34px; height:34px; border-radius:8px; cursor:pointer; background:${hex}; border:2px solid ${on?'#6818F8':'transparent'}; box-shadow:0 0 0 1px rgba(0,0,0,.1);`;
+    const segStyle=(on)=>`flex:1; padding:9px 6px; border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer; transition:.12s; border:1px solid ${on?'#6818F8':'#e0dfdb'}; background:${on?'#F1ECFF':'#fff'}; color:${on?'#6818F8':'#3b3b38'};`;
+    const thumbStyle=(src,on)=>`height:58px; border-radius:8px; cursor:pointer; background-image:url("${src}"); background-size:cover; background-position:center; border:2px solid ${on?'#6818F8':'#e6e5e1'};`;
+
+    return {
+      isGallery:true,
+      cloudReady:s.cloud.ready,
+      bradName:this.BRAD_NAME, bradTitle:s.bradTitle,
+      photo:s.photo, photoColor:s.photoColor,
+      photoBg: s.photo ? `url("${s.photo}")` : "none",
+      hasPhoto:!!s.photo, noPhoto:!s.photo,
+      bradOpen:s.bradOpen, toggleSarah:this.toggleSarah, closeSarah:this.closeSarah, setSarahTitle:this.setSarahTitle,
+      teamOpen:s.teamOpen, toggleTeam:this.toggleTeam, closeTeam:this.closeTeam,
+      teamLabel: s.team || "Select a team",
+      teamSelected: !!s.team,
+      teamColor: s.team ? "#1d2226" : "#8a7c54",
+      teamList: this.TEAMS.map(name=>{
+        const on = s.team===name;
+        return { name, onPick:()=>this.pickTeam(name),
+          style:`width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; background:${on?'#F1ECFF':'#fff'}; border:none; cursor:pointer; text-align:left; font-size:13px; font-weight:${on?'700':'500'}; color:#1d2226;`,
+          check: on };
+      }),
+      onAvatarFile:this.onAvatarFile, removeAvatar:()=>this.setState({photo:null}),
+      genBusy:s.genBusy, genLabel: s.genBusy? "Generating…" : "Generate from Claude",
+      generateText:this.generateText, cleanText:this.cleanText, onBodyPaste:this.onBodyPaste, pasteClean:this.pasteClean, cancelGen:this.cancelGen, cancelWriting:this.cancelWriting, saveText:this.saveText, saveTextLabel: s.textSaved? "Saved" : "Save text", footerOpts,
+      linkOpen:s.linkOpen, toggleLink:this.toggleLink, linkDraft:s.linkDraft, setLinkDraft:this.setLinkDraft, saveLink:this.saveLink,
+      hasLinkedProject:!!cur.linkedProject, noLinkedProject:!cur.linkedProject, linkedProjectUrl:cur.linkedProject||"", unlink:this.unlink, openLinked:this.openLinked,
+      placeholderBg:this.PLACEHOLDER_BG,
+      monthChips, sections, actions, swatches,
+      openBuilder:this.openBuilder,
+      exportPDF:this.exportPDF, exportWord:this.exportWord, sendHubspot:this.sendHubspot, sendReview:this.sendReview,
+      selectAll:()=> this.setState({selectedMonths:this.MONTHS.map((_,i)=>i)}),
+      selectCurrent:()=> this.setState({selectedMonths:[this.CURRENT]}),
+
+      degreeLabel:this.degLabel(cur.degree),
+      likesFmt:this.fmt(cur.likes),
+      footerCounts:`${this.fmt(cur.comments)} comments · ${this.fmt(cur.reposts)} reposts`,
+      likes:cur.likes, comments:cur.comments, reposts:cur.reposts,
+      body:cur.body, bodyCount:[...(cur.body||"")].length,
+
+      setBody:this.set("body"),
+      setLikes:this.setNum("likes"), setComments:this.setNum("comments"), setReposts:this.setNum("reposts"),
+      onAvatarFile:this.onAvatarFile, removeAvatar:()=>this.setState({photo:null}),
+
+      rowStyle,
+      verifiedTrackStyle:this.trackStyle(cur.verified), verifiedKnobStyle:this.knobStyle(cur.verified),
+      mediaTrackStyle:this.trackStyle(cur.hasMedia), mediaKnobStyle:this.knobStyle(cur.hasMedia),
+
+      // graphic editor modal
+      showGfx:!!gx,
+      gfxLabel: gx ? (this.MONTHS[s.posts[gx.postIdx].monthIndex]+" "+this.YEAR+" · post #"+this.numOf(gx.postIdx)) : "",
+      draftExisting: gx? gx.existing : false,
+      draftTemplate: draft&&draft.template, draftVariant: draft&&draft.variant,
+      draftText: draft&&draft.text, draftEyebrow: draft&&draft.eyebrow, draftImage: draft&&draft.image,
+      draftAspect: draft? this.aspectOf(draft.size) : "1/1",
+      draftIsHeadline: !!(draft&&draft.template==="headline"),
+      draftUsesImage: !!(draft&&(draft.template==="photoquote"||draft.template==="spokesperson"||draft.template==="image")),
+      draftNoImage: !!(draft&&!(draft.template==="photoquote"||draft.template==="spokesperson"||draft.template==="image")),
+      setDraftText:(e)=>this.setDraft({text:e.target.value, autoText:false}),
+      setDraftEyebrow:(e)=>this.setDraft({eyebrow:e.target.value}),
+      resetDraftText:()=>{ const pp=gx&&s.posts[gx.postIdx]; this.setDraft({ text:this.deriveText(pp&&pp.body), autoText:true }); },
+      regenPhrase:()=>{ const pp=gx&&s.posts[gx.postIdx]; const cands=this.poignantLines(pp&&pp.body); const cur=(draft&&draft.text)||""; let pick=cands[Math.floor(Math.random()*cands.length)]; let tries=0; while(cands.length>1 && pick===cur && tries<10){ pick=cands[Math.floor(Math.random()*cands.length)]; tries++; } this.setDraft({ text:pick, autoText:false }); },
+      draftAuto: !!(draft&&draft.autoText!==false),
+      pickStatement:()=>this.setDraft({template:"statement"}),
+      pickPhoto:()=>this.setDraft({template:"photoquote"}),
+      pickSpotlight:()=>this.setDraft({template:"spotlight"}),
+      pickHeadline:()=>this.setDraft({template:"headline"}),
+      tplStatementStyle:chipStyle(draft&&draft.template==="statement"),
+      tplPhotoStyle:chipStyle(draft&&draft.template==="photoquote"),
+      tplSpotlightStyle:chipStyle(draft&&draft.template==="spotlight"),
+      tplHeadlineStyle:chipStyle(draft&&draft.template==="headline"),
+      pickNavy:()=>this.setDraft({variant:"navy"}),
+      pickTeal:()=>this.setDraft({variant:"teal"}),
+      pickGreen:()=>this.setDraft({variant:"green"}),
+      pickInk:()=>this.setDraft({variant:"ink"}),
+      varNavyStyle:varStyle("#1e4a85", draft&&draft.variant==="navy"),
+      varTealStyle:varStyle("#22867c", draft&&draft.variant==="teal"),
+      varGreenStyle:varStyle("#2e9e62", draft&&draft.variant==="green"),
+      varInkStyle:varStyle("#0e2236", draft&&draft.variant==="ink"),
+      pickSquare:()=>this.setDraft({size:"square"}),
+      pickBanner:()=>this.setDraft({size:"banner"}),
+      pickTall:()=>this.setDraft({size:"tall"}),
+      sizeSquareStyle:segStyle(draft&&draft.size==="square"),
+      sizeBannerStyle:segStyle(draft&&draft.size==="banner"),
+      sizeTallStyle:segStyle(draft&&draft.size==="tall"),
+      pickImg0:()=>this.setDraft({image:this.LIB[0].src}),
+      pickImg1:()=>this.setDraft({image:this.LIB[1].src}),
+      pickImg2:()=>this.setDraft({image:this.LIB[2].src}),
+      pickImg3:()=>this.setDraft({image:this.LIB[3].src}),
+      img0Style:thumbStyle(this.LIB[0].src, draft&&draft.image===this.LIB[0].src),
+      img1Style:thumbStyle(this.LIB[1].src, draft&&draft.image===this.LIB[1].src),
+      img2Style:thumbStyle(this.LIB[2].src, draft&&draft.image===this.LIB[2].src),
+      img3Style:thumbStyle(this.LIB[3].src, draft&&draft.image===this.LIB[3].src),
+      galleryHtml: {__html:this.gfxGalleryHtml(draft)},
+      pickImageDelegate: this.pickImageDelegate,
+      tplHtml:{__html:this.gfxTplHtml(draft)}, varHtml:{__html:this.gfxVarHtml(draft)}, sizeHtml:{__html:this.gfxSizeHtml(draft)},
+      txtHtml:{__html:this.gfxTxtHtml(draft)}, bgHtml:{__html:this.gfxBgHtml(draft)},
+      onTxtClick:this.onTxtClick, onBgClick:this.onBgClick,
+      colorLocked: !(draft&&draft.template),
+      colorRowStyle: (draft&&draft.template) ? "display:flex; gap:10px; flex-wrap:wrap;" : "display:flex; gap:10px; flex-wrap:wrap; opacity:0.4; filter:grayscale(1); pointer-events:none;",
+      onTplClick:this.onTplClick, onVarClick:this.onVarClick, onSizeClick:this.onSizeClick,
+      draftGraphicHtml: draft? {__html:this.gfxHtml(draft)} : {__html:""},
+      dlOpen:s.dlOpen, toggleDl:this.toggleDl, closeDl:this.closeDl, pickPDF:this.pickPDF, pickWord:this.pickWord,
+      saveNow:this.saveNow, saveBtnLabel: s.savedFlash ? "Saved ✓" : "Save",
+      pickPNG:this.pickPNG, closePng:this.closePng, setPngCount:this.setPngCount, runPngExport:this.runPngExport,
+      pngOpen:s.pngOpen, pngBusy:!!s.pngBusy, pngIdle:!s.pngBusy, pngCount:s.pngCount||1, pngMax:Math.max(1,this.graphicIdxs().length),
+      pngStatus:s.pngStatus||"", pngCountLabel:((s.pngCount||1)>=this.graphicIdxs().length ? "All "+this.graphicIdxs().length : String(s.pngCount||1)),
+      pngSubtitle:(this.graphicIdxs().length+" graphic"+(this.graphicIdxs().length===1?"":"s")+" · exported at each set format"),
+      closeGfx:this.closeGfx, applyGfx:this.applyGfx, removeGfx:this.removeGfx,
+      brandOpen:s.brandOpen, openBrand:this.openBrand, closeBrand2:this.closeBrand2, brandPick:this.brandPick,
+      brandSubtitle: gx ? "CatalystOS founder library · pick one to edit for this post" : "CatalystOS founder library · pick one to start editing",
+      brandGridHtml:{__html:this.brandGridHtml(draft)},
+
+      // modal
+      showModal:!!m,
+      modalSending: m && m.stage==="sending",
+      modalDone: m && m.stage==="done",
+      modalCount: m? m.count : 0,
+      modalAccent: (m&&m.kind==="review") ? "#6818F8" : "#FF7A59",
+      modalIcon: (m&&m.kind==="review")
+        ? {__html:"<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12s-3.5-7-10-7-10 7-10 7 3.5 7 10 7 10-7 10-7z'/><circle cx='12' cy='12' r='3'/></svg>"}
+        : {__html:"<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 2L11 13'/><path d='M22 2l-7 20-4-9-9-4 20-7z'/></svg>"},
+      modalTitle: (m&&m.kind==="review") ? "Send to client for review" : "Send to HubSpot",
+      modalSubtitle: (m&&m.kind==="review") ? "CatalystOS · Sarah Mitchell · all months" : "CatalystOS Social · all months",
+      modalSendingText: (m? m.count:0)+((m&&m.kind==="review") ? " posts packaged for review…" : " posts pushing to HubSpot…"),
+      modalSendingSub: (m&&m.kind==="review") ? "Building a shareable approval link with every caption and graphic." : "Transferring copy, emojis, formatting, and graphics so your marketing manager can schedule them.",
+      modalDoneTitle: (m? m.count:0)+((m&&m.kind==="review") ? " posts ready for review" : " posts sent to HubSpot"),
+      modalDoneText: (m&&m.kind==="review") ? "A review link has been shared with the client — they can approve or comment on each post before it's scheduled." : "They're queued as drafts in your HubSpot Social tool with copy, emojis and graphics attached — ready to schedule.",
+      modalBullets: (m&&m.kind==="review")
+        ? {__html:"<div>\u2713 Every caption &amp; graphic included</div><div>\u2713 Per-post approve / request changes</div><div>\u2713 No HubSpot access needed for the client</div>"}
+        : {__html:"<div>\u2713 Post copy &amp; emojis preserved</div><div>\u2713 Bold / italic formatting mapped</div><div>\u2713 Graphics linked by month &amp; number</div>"},
+      modalDownloadLabel: (m&&m.kind==="review") ? "Download summary" : "Download payload",
+      closeModal:this.closeModal, stop:this.stop, downloadPayload:this.downloadPayload,
+    };
+  }
+}
+</script>
+</body>
+</html>

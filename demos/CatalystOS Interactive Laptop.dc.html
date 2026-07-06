@@ -3,43 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
 </style>
-</helmet>
-
-<div style="width: 1440px; min-height: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 70px; font-family: 'Inter', system-ui, sans-serif; background: radial-gradient(1500px 820px at 50% -12%, #262b35 0%, #14171d 52%, #0a0b0e 100%);">
-
+</head>
+<body>
+<div style="width: 1440px; min-height: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 70px; font-family: system-ui, sans-serif; background: radial-gradient(1500px 820px at 50% -12%, #262b35 0%, #14171d 52%, #0a0b0e 100%);">
   <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
-
-    <!-- Lid -->
     <div style="position: relative; width: 1244px; padding: 16px 16px 18px; border-radius: 22px 22px 8px 8px; background: linear-gradient(180deg, #1b1d22 0%, #0c0d10 100%); box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 60px 100px -40px rgba(0,0,0,0.75), 0 30px 60px -30px rgba(0,0,0,0.6);">
-      <!-- camera -->
       <div style="position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 7px; height: 7px; border-radius: 50%; background: #24262b; box-shadow: 0 0 0 1.5px #101216, inset 0 0 2px rgba(120,180,255,0.5);"></div>
-
-      <!-- Screen viewport -->
       <div style="position: relative; width: 1212px; height: 758px; overflow: hidden; border-radius: 6px; background: #F5F7FA; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);">
-        <dc-import name="COS" hint-size="1212px,758px" style="display: block; width: 1212px; height: 758px;"></dc-import>
+        <iframe src="https://demo-company-platform-mni7.vercel.app/" title="Platform Dashboard" style="display: block; width: 1212px; height: 758px; border: 0;"></iframe>
       </div>
     </div>
-
-    <!-- Hinge + base -->
     <div style="position: relative; width: 1244px; height: 14px; background: linear-gradient(180deg, #0a0b0e 0%, #17191e 100%); border-radius: 0 0 4px 4px;"></div>
     <div style="position: relative; width: 1360px; height: 24px; border-radius: 0 0 16px 16px; background: linear-gradient(180deg, #b9bec7 0%, #8c919b 46%, #6d7079 100%); box-shadow: 0 26px 44px -18px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.5);">
       <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 12px; border-radius: 0 0 12px 12px; background: linear-gradient(180deg, #6a6d76, #83868f);"></div>
     </div>
-
   </div>
 </div>
-</x-dc>
 </body>
 </html>
