@@ -3,25 +3,198 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  @keyframes cosRipple { 0% { transform: translate(-50%,-50%) scale(0.3); opacity: 0.55; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
 </style>
-</head>
-<body>
-<div style="width: 1440px; min-height: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 70px; font-family: system-ui, sans-serif; background: radial-gradient(1500px 820px at 50% -12%, #262b35 0%, #14171d 52%, #0a0b0e 100%);">
+</helmet>
+
+<div style="width: 1440px; min-height: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 70px; font-family: 'Inter', system-ui, sans-serif; background: radial-gradient(1500px 820px at 50% -12%, #262b35 0%, #14171d 52%, #0a0b0e 100%);">
   <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
     <div style="position: relative; width: 1244px; padding: 16px 16px 18px; border-radius: 22px 22px 8px 8px; background: linear-gradient(180deg, #1b1d22 0%, #0c0d10 100%); box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 60px 100px -40px rgba(0,0,0,0.75), 0 30px 60px -30px rgba(0,0,0,0.6);">
       <div style="position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 7px; height: 7px; border-radius: 50%; background: #24262b; box-shadow: 0 0 0 1.5px #101216, inset 0 0 2px rgba(120,180,255,0.5);"></div>
-      <div style="position: relative; width: 1212px; height: 758px; overflow: hidden; border-radius: 6px; background: #F5F7FA; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);">
-        <iframe src="https://demo-company-platform-mni7.vercel.app/" title="Platform Dashboard" style="display: block; width: 1212px; height: 758px; border: 0;"></iframe>
+
+      <div ref="{{ refScreen }}" style="position: relative; width: 1212px; height: 758px; overflow: hidden; border-radius: 6px; background: #F5F7FA; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);">
+        <dc-import name="COS" hint-size="1212px,758px" style="display: block; width: 1212px; height: 758px;"></dc-import>
+
+        <div ref="{{ refCaption }}" style="position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(14px); opacity: 0; transition: opacity .4s ease, transform .4s ease; pointer-events: none; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 999px; background: rgba(8,12,26,0.86); backdrop-filter: blur(8px); color: #fff; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; box-shadow: 0 14px 34px -12px rgba(0,0,0,0.6);">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(120deg,#6818F8,#FD5920); flex: none;"></span>
+          <span ref="{{ refCaptionText }}">Live demo</span>
+        </div>
+
+        <div ref="{{ refRipple }}" style="position: absolute; top: 0; left: 0; width: 46px; height: 46px; border-radius: 50%; border: 2px solid rgba(104,24,248,0.9); background: rgba(104,24,248,0.14); pointer-events: none; z-index: 44; opacity: 0; transform: translate(-50%,-50%) scale(0.3);"></div>
+
+        <div ref="{{ refCursor }}" style="position: absolute; top: 0; left: 0; z-index: 45; pointer-events: none; opacity: 0; transition: opacity .3s ease; will-change: transform; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style="display:block;">
+            <path d="M4 2 L4 20 L9 15.5 L12.5 22.5 L15.5 21 L12 14 L19 14 Z" fill="#ffffff" stroke="#1a1d24" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
     </div>
+
     <div style="position: relative; width: 1244px; height: 14px; background: linear-gradient(180deg, #0a0b0e 0%, #17191e 100%); border-radius: 0 0 4px 4px;"></div>
     <div style="position: relative; width: 1360px; height: 24px; border-radius: 0 0 16px 16px; background: linear-gradient(180deg, #b9bec7 0%, #8c919b 46%, #6d7079 100%); box-shadow: 0 26px 44px -18px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.5);">
       <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 12px; border-radius: 0 0 12px 12px; background: linear-gradient(180deg, #6a6d76, #83868f);"></div>
     </div>
   </div>
 </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      refScreen: (el) => { this.screenEl = el; },
+      refCursor: (el) => { this.cursorEl = el; },
+      refRipple: (el) => { this.rippleEl = el; },
+      refCaption: (el) => { this.captionEl = el; },
+      refCaptionText: (el) => { this.captionTextEl = el; },
+    };
+  }
+
+  componentDidMount() {
+    if (/[?&]static\b/.test(location.search)) return;
+    this._alive = true;
+    this.cur = { x: 606, y: 300 };
+    this._boot();
+  }
+  componentWillUnmount() { this._alive = false; }
+  sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async _boot() {
+    const t0 = Date.now();
+    while (this._alive && Date.now() - t0 < 20000) {
+      if (this.screenEl && this.screenEl.querySelectorAll('[data-app]').length >= 4) break;
+      await this.sleep(200);
+    }
+    if (!this._alive || !this.screenEl) return;
+    await this.sleep(1000);
+    if (this.cursorEl) this.cursorEl.style.opacity = '1';
+    while (this._alive) {
+      try { await this._runOnce(); } catch (e) { await this.sleep(1500); }
+      await this.sleep(1400);
+    }
+  }
+
+  _caption(txt) {
+    if (!this.captionEl) return;
+    if (this.captionTextEl) this.captionTextEl.textContent = txt;
+    this.captionEl.style.opacity = '1';
+    this.captionEl.style.transform = 'translateX(-50%) translateY(0)';
+  }
+  _hideCaption() {
+    if (!this.captionEl) return;
+    this.captionEl.style.opacity = '0';
+    this.captionEl.style.transform = 'translateX(-50%) translateY(14px)';
+  }
+
+  _scroller() {
+    return this.screenEl.querySelector('#cos-scroll') ||
+           this.screenEl.querySelector('[style*="overflow-y: auto"]') ||
+           this.screenEl.querySelector('[style*="overflow-y:auto"]');
+  }
+
+  async _scrollTo(top, dur = 700) {
+    const sc = this._scroller(); if (!sc) return;
+    const from = sc.scrollTop, delta = top - from, t0 = performance.now();
+    await new Promise(res => {
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        sc.scrollTop = from + delta * e;
+        if (p < 1 && this._alive) requestAnimationFrame(step); else res();
+      };
+      requestAnimationFrame(step);
+    });
+    await this.sleep(120);
+  }
+
+  _local(el) {
+    const sr = this.screenEl.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    return { x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2 };
+  }
+
+  async _move(x, y, dur = 650) {
+    const from = { ...this.cur }, t0 = performance.now();
+    await new Promise(res => {
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / dur);
+        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        this.cur.x = from.x + (x - from.x) * e;
+        this.cur.y = from.y + (y - from.y) * e;
+        if (this.cursorEl) this.cursorEl.style.transform = "translate(" + this.cur.x + "px, " + this.cur.y + "px)";
+        if (p < 1 && this._alive) requestAnimationFrame(step); else res();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  _ripple() {
+    const r = this.rippleEl; if (!r) return;
+    r.style.left = this.cur.x + 'px';
+    r.style.top = this.cur.y + 'px';
+    r.style.animation = 'none';
+    void r.offsetWidth;
+    r.style.animation = 'cosRipple .5s ease-out';
+  }
+
+  async _visit(tile, label) {
+    const c = this._local(tile);
+    if (c.y < 30 || c.y > 728) return;
+    await this._move(c.x, c.y);
+    this._caption(label);
+    this._ripple();
+    tile.style.transition = 'transform .25s cubic-bezier(.2,.8,.2,1)';
+    tile.style.transform = 'translateY(-6px) scale(1.02)';
+    await this.sleep(1050);
+    tile.style.transform = '';
+    await this.sleep(180);
+  }
+
+  async _runOnce() {
+    const sc = this._scroller();
+    const allTiles = [...this.screenEl.querySelectorAll('[data-app]')];
+    if (!allTiles.length) return;
+    const label = (t) => {
+      const txt = (t.textContent || '').replace(/\s+/g, ' ').trim();
+      return txt || null;
+    };
+    const maxScroll = sc ? Math.max(0, sc.scrollHeight - sc.clientHeight) : 0;
+
+    await this._scrollTo(0, 500);
+    this._caption('Your team\u2019s workspace \u2014 every tool in one place');
+    await this.sleep(1300);
+
+    const stops = maxScroll > 4 ? [0, maxScroll * 0.5, maxScroll] : [0];
+    const seen = new Set();
+    for (const top of stops) {
+      if (!this._alive) return;
+      await this._scrollTo(top);
+      await this.sleep(220);
+      const visible = allTiles.filter(t => { const y = this._local(t).y; return y > 60 && y < 700 && label(t) && !seen.has(t); });
+      for (const t of visible.slice(0, 3)) {
+        if (!this._alive) return;
+        seen.add(t);
+        await this._visit(t, label(t));
+      }
+    }
+
+    this._caption('One hub, every deliverable \u2014 always on brand');
+    await this.sleep(1600);
+    this._hideCaption();
+    await this._scrollTo(0, 500);
+    await this._move(606, 300, 500);
+  }
+}
+</script>
 </body>
 </html>
