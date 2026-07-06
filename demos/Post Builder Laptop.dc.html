@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  @keyframes cosRipple { 0% { transform: translate(-50%,-50%) scale(0.3); opacity: 0.55; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
+</style>
+</helmet>
+
+<div style="width: 1440px; min-height: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 70px; font-family: 'Inter', system-ui, sans-serif; background: radial-gradient(1500px 820px at 50% -12%, #262b35 0%, #14171d 52%, #0a0b0e 100%);">
+
+  <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+
+    <!-- Lid -->
+    <div style="position: relative; width: 1244px; padding: 16px 16px 18px; border-radius: 22px 22px 8px 8px; background: linear-gradient(180deg, #1b1d22 0%, #0c0d10 100%); box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 60px 100px -40px rgba(0,0,0,0.75), 0 30px 60px -30px rgba(0,0,0,0.6);">
+      <!-- camera -->
+      <div style="position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 7px; height: 7px; border-radius: 50%; background: #24262b; box-shadow: 0 0 0 1.5px #101216, inset 0 0 2px rgba(120,180,255,0.5);"></div>
+
+      <!-- Screen viewport -->
+      <div style="position: relative; width: 1212px; height: 758px; overflow: hidden; border-radius: 6px; background: #F5F7FA; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);">
+        <iframe ref="{{ refFrame }}" src="postbuilder/Post%20Builder.dc.html" title="Post Builder" style="display: block; width: 1212px; height: 758px; border: 0;"></iframe>
+
+        <!-- caption chip -->
+        <div ref="{{ refCaption }}" style="position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(14px); opacity: 0; transition: opacity .4s ease, transform .4s ease; pointer-events: none; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 999px; background: rgba(8,12,26,0.86); backdrop-filter: blur(8px); color: #fff; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; box-shadow: 0 14px 34px -12px rgba(0,0,0,0.6);">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(120deg,#6818F8,#FD5920); flex: none;"></span>
+          <span ref="{{ refCaptionText }}">Live demo</span>
+        </div>
+
+        <!-- click ripple -->
+        <div ref="{{ refRipple }}" style="position: absolute; top: 0; left: 0; width: 46px; height: 46px; border-radius: 50%; border: 2px solid rgba(104,24,248,0.9); background: rgba(104,24,248,0.14); pointer-events: none; z-index: 44; opacity: 0; transform: translate(-50%,-50%) scale(0.3);"></div>
+
+        <!-- cursor -->
+        <div ref="{{ refCursor }}" style="position: absolute; top: 0; left: 0; z-index: 45; pointer-events: none; opacity: 0; transition: opacity .3s ease; will-change: transform; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style="display:block;">
+            <path d="M4 2 L4 20 L9 15.5 L12.5 22.5 L15.5 21 L12 14 L19 14 Z" fill="#ffffff" stroke="#1a1d24" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hinge + base -->
+    <div style="position: relative; width: 1244px; height: 14px; background: linear-gradient(180deg, #0a0b0e 0%, #17191e 100%); border-radius: 0 0 4px 4px;"></div>
+    <div style="position: relative; width: 1360px; height: 24px; border-radius: 0 0 16px 16px; background: linear-gradient(180deg, #b9bec7 0%, #8c919b 46%, #6d7079 100%); box-shadow: 0 26px 44px -18px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.5);">
+      <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 12px; border-radius: 0 0 12px 12px; background: linear-gradient(180deg, #6a6d76, #83868f);"></div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      refFrame: (el) => { this.frameEl = el; },
+      refCursor: (el) => { this.cursorEl = el; },
+      refRipple: (el) => { this.rippleEl = el; },
+      refCaption: (el) => { this.captionEl = el; },
+      refCaptionText: (el) => { this.captionTextEl = el; },
+    };
+  }
+
+  componentDidMount() {
+    this._alive = true;
+    this.cur = { x: 606, y: 379 };
+    this._pauseUntil = 0;
+    this._boot();
+  }
+
+  componentWillUnmount() { this._alive = false; }
+
+  sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async _boot() {
+    const t0 = Date.now();
+    while (this._alive && Date.now() - t0 < 20000) {
+      try {
+        const doc = this.frameEl && this.frameEl.contentDocument;
+        if (doc && doc.querySelector('.pmc-tool') && doc.querySelector('.pmc-step') && doc.querySelector('.pmc-del')) {
+          this.idoc = doc;
+          this.iwin = this.frameEl.contentWindow;
+          break;
+        }
+      } catch (e) {}
+      await this.sleep(200);
+    }
+    if (!this.idoc) return;
+    try {
+      this.idoc.addEventListener('pointerdown', (e) => { if (e.isTrusted) this._pauseUntil = Date.now() + 14000; }, true);
+      this.idoc.addEventListener('keydown', (e) => { if (e.isTrusted) this._pauseUntil = Date.now() + 14000; }, true);
+    } catch (e) {}
+    await this.sleep(1200);
+    this.cursorEl.style.opacity = '1';
+    while (this._alive) {
+      try { await this._runOnce(); } catch (e) { await this.sleep(1500); }
+      await this._idle(1600);
+    }
+  }
+
+  async _idle(ms) {
+    await this.sleep(ms);
+    while (this._alive && Date.now() < this._pauseUntil) {
+      this._caption('You\u2019re in control \u2014 resuming shortly\u2026');
+      await this.sleep(600);
+    }
+  }
+
+  _caption(txt) {
+    if (!this.captionEl) return;
+    if (this.captionTextEl) this.captionTextEl.textContent = txt;
+    this.captionEl.style.opacity = '1';
+    this.captionEl.style.transform = 'translateX(-50%) translateY(0)';
+  }
+  _hideCaption() {
+    if (!this.captionEl) return;
+    this.captionEl.style.opacity = '0';
+    this.captionEl.style.transform = 'translateX(-50%) translateY(14px)';
+  }
+
+  _center(el) {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+
+  _scroller() {
+    return this.idoc.querySelector('.pmc-scroll') ||
+           this.idoc.querySelector('[style*="overflow-y:auto"]') ||
+           this.idoc.querySelector('[style*="overflow-y: auto"]');
+  }
+
+  async _scrollTo(el, pad = 150) {
+    const panel = this._scroller();
+    if (!panel || !el) return;
+    const pr = panel.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const target = panel.scrollTop + (er.top - pr.top) - pad;
+    const from = panel.scrollTop;
+    const delta = target - from;
+    if (Math.abs(delta) < 4) return;
+    const dur = 520, t0 = performance.now();
+    await new Promise(res => {
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        panel.scrollTop = from + delta * e;
+        if (p < 1 && this._alive) requestAnimationFrame(step); else res();
+      };
+      requestAnimationFrame(step);
+    });
+    await this.sleep(120);
+  }
+
+  async _move(x, y, dur = 620) {
+    const from = { ...this.cur }, t0 = performance.now();
+    await new Promise(res => {
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / dur);
+        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        this.cur.x = from.x + (x - from.x) * e;
+        this.cur.y = from.y + (y - from.y) * e;
+        this.cursorEl.style.transform = `translate(${this.cur.x}px, ${this.cur.y}px)`;
+        if (p < 1 && this._alive) requestAnimationFrame(step); else res();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  _ripple() {
+    const r = this.rippleEl;
+    r.style.left = this.cur.x + 'px';
+    r.style.top = this.cur.y + 'px';
+    r.style.animation = 'none';
+    void r.offsetWidth;
+    r.style.animation = 'cosRipple .5s ease-out';
+  }
+
+  async _moveToEl(el) {
+    if (!el) return;
+    const c = this._center(el);
+    await this._move(c.x, c.y);
+  }
+
+  async _click(el) {
+    if (!el) return;
+    await this._moveToEl(el);
+    this._ripple();
+    await this.sleep(120);
+    el.click();
+    await this.sleep(380);
+  }
+
+  // React-aware controlled-input value set
+  _setValue(el, val) {
+    const proto = el.tagName === 'TEXTAREA'
+      ? this.iwin.HTMLTextAreaElement.prototype
+      : this.iwin.HTMLInputElement.prototype;
+    const setter = Object.getOwnPropertyDescriptor(proto, 'value').set;
+    setter.call(el, val);
+    el.dispatchEvent(new this.iwin.Event('input', { bubbles: true }));
+  }
+
+  async _type(el, text, per = 34) {
+    if (!el) return;
+    await this._moveToEl(el);
+    this._ripple();
+    el.focus();
+    this._setValue(el, '');
+    await this.sleep(200);
+    for (let i = 1; i <= text.length && this._alive; i++) {
+      this._setValue(el, text.slice(0, i));
+      await this.sleep(per);
+    }
+    await this.sleep(300);
+  }
+
+  _byText(sel, re) {
+    return [...this.idoc.querySelectorAll(sel)].find(e => re.test(e.textContent.trim()));
+  }
+
+  async _runOnce() {
+    const d = this.idoc;
+
+    // ── 1. Plan the month: bump the post count ──
+    const stepBtns = d.querySelectorAll('.pmc-step');
+    const inc = stepBtns[1], dec = stepBtns[0];
+    await this._scrollTo(inc, 90);
+    this._caption('Plan how many posts to publish this month');
+    if (inc) { await this._click(inc); await this._click(inc); }
+    await this.sleep(500);
+    if (dec) { await this._click(dec); await this._click(dec); }
+    await this._idle(700);
+
+    // ── 2. Expand a post and rewrite the copy ──
+    const bodyDivs = [...d.querySelectorAll('div')].filter(el => {
+      const s = el.getAttribute('style') || '';
+      return /cursor\s*:\s*text/.test(s) && el.onclick;
+    });
+    const body = bodyDivs[0];
+    if (body) {
+      await this._scrollTo(body, 120);
+      this._caption('Click any post to edit it inline');
+      await this._click(body);
+      await this.sleep(400);
+      const ta = d.querySelector('textarea');
+      if (ta) {
+        this._caption('Write your own copy \u2014 or generate it with AI');
+        await this._type(ta, 'The advisors winning right now treat content like a product, not a chore. Here\u2019s the system we build for them.', 26);
+        const save = this._byText('button', /^Save$/i) || this._byText('.pmc-back', /Save/i);
+        this._caption('Save \u2014 the whole team sees it live');
+        if (save) await this._click(save);
+      }
+    }
+    await this._idle(800);
+
+    // ── 3. Add an on-brand graphic ──
+    const seg = this._byText('span', /^(Photo|Quote|Stat)$/);
+    if (seg) {
+      await this._scrollTo(seg, 150);
+      this._caption('Drop in an on-brand graphic');
+      await this._click(seg);
+      await this.sleep(600);
+    }
+    const customize = this._byText('button', /Customize template/i);
+    if (customize) {
+      this._caption('Fine-tune the template \u2014 color, size, photo');
+      await this._scrollTo(customize, 150);
+      await this._click(customize);
+      await this.sleep(1400);
+      const closeGfx = this._byText('.pmc-back', /^\u00d7$|Close|Done/) ||
+                       [...d.querySelectorAll('button')].find(b => b.textContent.trim() === '\u00d7');
+      if (closeGfx) await this._click(closeGfx);
+    }
+    await this._idle(800);
+
+    // ── 4. Company templates ──
+    const tmplBtn = this._byText('.pmc-tool', /Company Templates/i);
+    if (tmplBtn) {
+      this._caption('Everything pulls from your company templates');
+      await this._click(tmplBtn);
+      await this.sleep(1500);
+      const close = [...d.querySelectorAll('button')].find(b => b.textContent.trim() === '\u00d7');
+      if (close) await this._click(close);
+    }
+    await this._idle(700);
+
+    // ── 5. Export / send ──
+    const dl = this._byText('.pmc-tool', /^Download/i);
+    if (dl) {
+      this._caption('Export to PDF, Word or PNG \u2014 or push to HubSpot');
+      await this._click(dl);
+      await this.sleep(1400);
+      await this._click(dl); // close dropdown
+    }
+
+    this._caption('One workspace, synced live for the whole team');
+    await this.sleep(1900);
+    this._hideCaption();
+    await this._scrollTo(d.querySelector('.pmc-step'), 90);
+  }
+}
+</script>
+</body>
+</html>
