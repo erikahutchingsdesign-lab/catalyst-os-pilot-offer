@@ -40,6 +40,8 @@
   @keyframes hcProg { from { width: 0%; } to { width: 100%; } }
   @keyframes hcSpin { to { transform: rotate(360deg); } }
   input::placeholder { color: #A6AEC0; }
+  /* Keep every top-level block at one consistent column width */
+  .hc-main > * { width: 100%; max-width: 940px; }
   @media (max-width: 768px) {
     /* CSS in here for mobile only */
     .hc-top-row { display: flex !important; flex-direction: column !important; }
@@ -404,7 +406,7 @@
         </div>
 
         <!-- Case Study 1 -->
-        <section style="margin-top: 40px; animation: hcRise .6s ease .1s both;">
+        <section style="margin-top: 40px; width: 100%; animation: hcRise .6s ease .1s both;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 22px;">
             <div style="display: flex; align-items: center; gap: 14px; width: 100%;">
               <div style="flex: 1; height: 1px; background: rgba(8,26,83,0.12);"></div>
@@ -588,7 +590,7 @@
           </div>
 
         </section>
-        <section style="margin-top: 40px; animation: hcRise .6s ease .1s both;">
+        <section style="margin-top: 40px; width: 100%; animation: hcRise .6s ease .1s both;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 22px;">
             <div style="display: flex; align-items: center; gap: 14px; width: 100%;">
               <div style="flex: 1; height: 1px; background: rgba(8,26,83,0.12);"></div>
