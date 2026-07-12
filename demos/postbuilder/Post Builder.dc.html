@@ -801,7 +801,7 @@ class Component extends DCLogic {
   mm(mi){ return String(mi+1).padStart(2,"0"); }
   folderName(mi){ return this.YEAR+"_"+this.mm(mi)+"_Founder_Led_Sarah"; }
   fileName(mi, num){ return this.folderName(mi)+"_"+num+".png"; }
-  imgPath(post, num){ return post.image || (this.folderName(post.monthIndex)+"/"+this.fileName(post.monthIndex, num)); }
+  imgPath(post, num){ return post.image || ("assets/founders_sarah/"+String(((num-1)%11)+1).padStart(2,"0")+".png"); }
 
   monthPostIndices(mi){
     return this.state.posts.map((p,i)=>({p,i})).filter(o=>o.p.monthIndex===mi).map(o=>o.i);
